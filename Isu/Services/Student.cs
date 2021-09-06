@@ -1,10 +1,8 @@
-using System;
-
 namespace Isu.Services
 {
     public class Student
     {
-        private static int _counter = 0;
+        private static int _counter;
         public Student(string name, Group group)
         {
             Name = name;

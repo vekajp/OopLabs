@@ -51,7 +51,7 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                _isuService.AddGroup("M%*76");
+                _isuService.AddGroup("M%*766");
             });
         }
 

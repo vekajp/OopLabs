@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Isu.Tools;
@@ -11,7 +10,7 @@ namespace Isu.Services
 
         public Group(string name)
         {
-            if (Regex.IsMatch(name, @"M3[0-9]{3}+$"))
+            if (Regex.IsMatch(name, @"M3[0-9]{3}"))
             {
                 Name = name;
                 CourseNumber = new CourseNumber(int.Parse(name[2].ToString()));
@@ -40,7 +39,7 @@ namespace Isu.Services
 
         public Student AddStudent(string name)
         {
-            Student student = new Student(name, this);
+            var student = new Student(name, this);
             return AddStudent(student);
         }
 
