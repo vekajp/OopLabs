@@ -6,7 +6,7 @@ namespace Isu.Services
 {
     public class Group
     {
-        private int maxStudentPerGroup = 20;
+        private const int MaxStudentPerGroup = 20;
 
         public Group(string name)
         {
@@ -22,20 +22,11 @@ namespace Isu.Services
             }
         }
 
-        public string Name
-        {
-            get;
-        }
+        public string Name { get; }
 
-        public CourseNumber CourseNumber
-        {
-            get;
-        }
+        public CourseNumber CourseNumber { get; }
 
-        public List<Student> Students
-        {
-            get;
-        }
+        public List<Student> Students { get; }
 
         public Student AddStudent(string name)
         {
@@ -45,15 +36,13 @@ namespace Isu.Services
 
         public Student AddStudent(Student student)
         {
-            if (Students.Capacity < maxStudentPerGroup)
-            {
-                Students.Add(student);
-                return student;
-            }
-            else
+            if (Students.Count >= MaxStudentPerGroup)
             {
                 throw new IsuException("Too many students in the group");
             }
+
+            Students.Add(student);
+            return student;
         }
 
         public bool DeleteStudent(Student student)

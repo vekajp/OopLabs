@@ -10,21 +10,11 @@ namespace Isu.Services
             Group = group;
         }
 
-        public Group Group
-        {
-            get;
-            private set;
-        }
+        public Group Group { get; private set; }
 
-        public int Id
-        {
-            get;
-        }
+        public int Id { get; }
 
-        public string Name
-        {
-            get;
-        }
+        public string Name { get; }
 
         public void ChangeGroup(Group group)
         {
