@@ -36,13 +36,9 @@ namespace Shops.UI.UserActions
                 return false;
             }
 
-            if (Manager.Products.Count == 0)
-            {
-                PrintMessage("No products registered yet");
-                return false;
-            }
-
-            return true;
+            if (Manager.Products.Count != 0) return true;
+            PrintMessage("No products registered yet");
+            return false;
         }
 
         protected Shop GetUserShopSelection()
@@ -55,7 +51,7 @@ namespace Shops.UI.UserActions
                     .PageSize(optionsCount)
                     .AddChoices(shops));
 
-            return Manager.GetShopById(GetId(shopChoice));
+            return Manager.FindShopById(GetId(shopChoice));
         }
 
         protected Product GetUserProductSelection()
@@ -68,19 +64,19 @@ namespace Shops.UI.UserActions
                     .PageSize(optionsCount)
                     .AddChoices(products));
 
-            return Manager.GetProductById(GetId(shopChoice));
+            return Manager.FindProductById(GetId(shopChoice));
         }
 
         protected List<Product> GetUserProductsSelection()
         {
             List<string> productNames = GetUserMultipleChoice("Select products", GetProductNames());
-            return productNames.Select(name => Manager.GetProductById(GetId(name))).ToList();
+            return productNames.Select(name => Manager.FindProductById(GetId(name))).ToList();
         }
 
         protected List<Shop> GetUserShopsSelection()
         {
             List<string> shopNames = GetUserMultipleChoice("Select shops", GetShopNames());
-            return shopNames.Select(name => Manager.GetShopById(GetId(name))).ToList();
+            return shopNames.Select(name => Manager.FindShopById(GetId(name))).ToList();
         }
 
         private static string FormatNameAndId(string name, int id)

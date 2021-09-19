@@ -5,19 +5,12 @@ namespace Shops.Services
 {
     public class Delivery
     {
-        public Delivery()
+        public Delivery(List<ProductUnit> units)
         {
-            Units = new List<ProductUnit>();
+            Units = units;
         }
 
-        public List<ProductUnit> Units { get; }
-
-        public ProductUnit AddProduct(Product product, Price price, uint quantity)
-        {
-            ProductUnit unit = new ProductUnit(product, price, quantity);
-            Units.Add(unit);
-            return unit;
-        }
+        private List<ProductUnit> Units { get; }
 
         public void Deliver(Shop shop)
         {

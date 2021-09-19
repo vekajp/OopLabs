@@ -37,21 +37,21 @@ namespace Shops.UI.UserActions
 
         private static Purchase FormPurchase(List<Product> products)
         {
-            var purchase = new Purchase();
+            var units = new List<PurchaseUnit>();
             foreach (Product product in products)
             {
                 string description = $"{product.Name}({product.Id})";
                 uint amount = AnsiConsole.Ask<uint>($"Enter amount for product {description}");
-                purchase.AddProduct(product, amount);
+                units.Add(new PurchaseUnit(product, amount));
             }
 
-            return purchase;
+            return new Purchase(units);
         }
 
         private Shop GetTargetShop(Purchase purchase)
         {
             Shop shop = null;
-            shop = AnsiConsole.Confirm("Choose the cheapest shop?") ? Manager.GetCheapestShop(purchase) : GetUserShopSelection();
+            shop = AnsiConsole.Confirm("Choose the cheapest shop?") ? Manager.FindCheapestShop(purchase) : GetUserShopSelection();
 
             return shop;
         }

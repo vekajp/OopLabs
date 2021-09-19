@@ -6,33 +6,36 @@ namespace Shops.Services
 {
     public class ShopManager
     {
+        private List<Shop> _shops;
+        private List<Product> _products;
         public ShopManager()
         {
-            Shops = new List<Shop>();
-            Products = new List<Product>();
+            _shops = new List<Shop>();
+            _products = new List<Product>();
         }
 
-        public List<Shop> Shops { get; }
-        public List<Product> Products { get; }
+        public IReadOnlyList<Shop> Shops => _shops;
+
+        public IReadOnlyList<Product> Products => _products;
 
         public Shop RegisterShop(int id, string name, string address)
         {
             if (ExistsShopWithId(id)) throw new ArgumentException($"Shop with id \"{id}\" already exists");
             Shop shop = new Shop(id, name, address);
-            Shops.Add(shop);
+            _shops.Add(shop);
             return shop;
         }
 
-        public Product GetProductById(int id)
+        public Product FindProductById(int id)
         {
-            return Products.FirstOrDefault(x => x.Id == id);
+            return _products.Find(x => x.Id == id);
         }
 
         public Product RegisterProduct(int id, string name)
         {
-            if (GetProductById(id) != null) throw new Exception($"Product with id \"{id}\" was already registered");
+            if (FindProductById(id) != null) throw new Exception($"Product with id \"{id}\" was already registered");
             Product product = new Product(id, name);
-            Products.Add(product);
+            _products.Add(product);
             return product;
         }
 
@@ -41,19 +44,7 @@ namespace Shops.Services
             shop.ChangePrice(product, newPrice);
         }
 
-        public Shop GetShopWithCheapestProduct(Product product)
-        {
-            Shop result = null;
-            foreach (Shop shop in Shops.Where(shop => shop.HasProduct(product)))
-            {
-                result ??= shop;
-                result = result.GetCost(product).Value < shop.GetCost(product).Value ? result : shop;
-            }
-
-            return result;
-        }
-
-        public Shop GetCheapestShop(Purchase purchase)
+        public Shop FindCheapestShop(Purchase purchase)
         {
             Shop cheapest = null;
             Price minimumPrice = new Price(int.MaxValue);
@@ -72,14 +63,14 @@ namespace Shops.Services
             return cheapest;
         }
 
-        public Shop GetShopById(int id)
+        public Shop FindShopById(int id)
         {
-            return Shops.FirstOrDefault(shop => shop.Id == id);
+            return _shops.Find(shop => shop.Id == id);
         }
 
         private bool ExistsShopWithId(int id)
         {
-            Shop shop = GetShopById(id);
+            Shop shop = FindShopById(id);
             return shop != null;
         }
     }

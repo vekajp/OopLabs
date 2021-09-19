@@ -25,16 +25,16 @@ namespace Shops.UI.UserActions
 
         private Delivery FormDelivery(List<Product> products)
         {
-            var delivery = new Delivery();
+            var units = new List<ProductUnit>();
             foreach (Product product in products)
             {
                 string description = $"{product.Name}({product.Id})";
                 uint price = AnsiConsole.Ask<uint>($"Set price for {description}");
                 uint quantity = AnsiConsole.Ask<uint>($"Set quantity for {description}");
-                delivery.AddProduct(product, new Price(price), quantity);
+                units.Add(new ProductUnit(product, new Price(price), quantity));
             }
 
-            return delivery;
+            return new Delivery(units);
         }
 
         private void Deliver(Delivery delivery, List<Shop> shops)

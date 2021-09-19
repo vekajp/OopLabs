@@ -20,43 +20,33 @@ namespace Shops.Services
         private string Address { get; }
         private List<ProductUnit> Products { get; }
 
-        public ProductUnit GetUnit(string productName)
+        public ProductUnit FindUnit(Product product)
         {
-            return Products.FirstOrDefault(unit => unit.Product.Name == productName);
+            return Products.Find(unit => unit.Product == product);
         }
 
-        public ProductUnit GetUnit(Product product)
+        public void AddProduct(ProductUnit unit)
         {
-            return Products.FirstOrDefault(unit => unit.Product == product);
-        }
-
-        public ProductUnit AddProduct(ProductUnit unit)
-        {
-            ProductUnit shopUnit = GetUnit(unit.Product);
+            ProductUnit shopUnit = FindUnit(unit.Product);
             if (shopUnit != null)
             {
-                return shopUnit.Merge(unit);
+                shopUnit.Merge(unit);
+                return;
             }
 
             Products.Add(unit);
-            return unit;
-        }
-
-        public bool HasProduct(Product product)
-        {
-            return GetUnit(product) != null;
         }
 
         public Price GetCost(Product product)
         {
-            ProductUnit unit = GetUnit(product);
+            ProductUnit unit = FindUnit(product);
             if (unit == null) throw new Exception($"No {product.Name} in shop {Name}");
             return unit.Price;
         }
 
         public ProductUnit ChangePrice(Product product, uint newPrice)
         {
-            ProductUnit unit = GetUnit(product) ?? throw new ArgumentException($"No product {product.Name} in shop {Name}");
+            ProductUnit unit = FindUnit(product) ?? throw new ArgumentException($"No product {product.Name} in shop {Name}");
             if (unit.Cost() == newPrice) throw new Exception("New price equals to old price");
             var newUnit = new ProductUnit(unit.Product, new Price(newPrice), unit.Count);
             Products.Remove(unit);
@@ -84,13 +74,14 @@ namespace Shops.Services
 
         private bool InStock(PurchaseUnit item)
         {
-            ProductUnit unit = GetUnit(item.Product);
+            ProductUnit unit = FindUnit(item.Product);
+            if (unit == null) return false;
             return unit.Count >= item.Amount;
         }
 
         private void ExtractProducts(PurchaseUnit item)
         {
-            ProductUnit unit = GetUnit(item.Product) ?? throw new ArgumentException();
+            ProductUnit unit = FindUnit(item.Product) ?? throw new ArgumentException();
             unit.ExtractProducts(item.Amount);
         }
 

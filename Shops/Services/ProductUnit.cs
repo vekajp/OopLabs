@@ -31,12 +31,11 @@ namespace Shops.Services
             Count += number;
         }
 
-        public ProductUnit Merge(ProductUnit unit)
+        public void Merge(ProductUnit unit)
         {
-            if (unit == this) return unit;
+            if (unit == this) return;
             Price = Price.Value < unit.Price.Value ? Price : unit.Price;
             AddProducts(unit.Count);
-            return this;
         }
     }
 }
