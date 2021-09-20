@@ -44,26 +44,14 @@ namespace Shops.UI.UserActions
         protected Shop GetUserShopSelection()
         {
             List<string> shops = GetShopNames();
-            int optionsCount = shops.Count > 3 ? shops.Count : 3;
-            string shopChoice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("Choose one of following options")
-                    .PageSize(optionsCount)
-                    .AddChoices(shops));
-
+            string shopChoice = GetUserSingleChoise(shops);
             return Manager.FindShopById(GetId(shopChoice));
         }
 
         protected Product GetUserProductSelection()
         {
             List<string> products = GetProductNames();
-            int optionsCount = products.Count > 3 ? products.Count : 3;
-            string shopChoice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("Choose one of following options")
-                    .PageSize(optionsCount)
-                    .AddChoices(products));
-
+            string shopChoice = GetUserSingleChoise(products);
             return Manager.FindProductById(GetId(shopChoice));
         }
 
@@ -99,6 +87,17 @@ namespace Shops.UI.UserActions
                     .PageSize(pageSize)
                     .AddChoices(options));
             return chosenOptions;
+        }
+
+        private static string GetUserSingleChoise(List<string> choices)
+        {
+            int optionsCount = choices.Count > 3 ? choices.Count : 3;
+            string choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose one of following options")
+                    .PageSize(optionsCount)
+                    .AddChoices(choices));
+            return choice;
         }
 
         private List<string> GetShopNames()

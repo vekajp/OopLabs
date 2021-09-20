@@ -11,12 +11,6 @@ namespace Shops.Services
         }
 
         public Product Product { get; }
-        public uint Amount { get; private set; }
-
-        public void Merge(PurchaseUnit unit)
-        {
-            if (unit == this) return;
-            Amount += unit.Amount;
-        }
+        public uint Amount { get; }
     }
 }

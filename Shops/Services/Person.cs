@@ -6,7 +6,7 @@ namespace Shops.Services
     {
         public Person(string name, uint money)
         {
-            Name = name ?? throw new ArgumentNullException();
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Money = money;
         }
 
@@ -15,6 +15,7 @@ namespace Shops.Services
 
         public void Buy(Price price)
         {
+            if (!IsAbleToPay(price)) throw new ArgumentException(nameof(price));
             Money -= price.Value;
         }
 

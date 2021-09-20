@@ -33,7 +33,7 @@ namespace Shops.Services
 
         public Product RegisterProduct(int id, string name)
         {
-            if (FindProductById(id) != null) throw new Exception($"Product with id \"{id}\" was already registered");
+            if (FindProductById(id) != null) throw new ArgumentException($"Product with id \"{id}\" was already registered");
             Product product = new Product(id, name);
             _products.Add(product);
             return product;

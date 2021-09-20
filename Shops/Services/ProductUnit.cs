@@ -26,16 +26,16 @@ namespace Shops.Services
             Count -= number;
         }
 
-        public void AddProducts(uint number)
-        {
-            Count += number;
-        }
-
         public void Merge(ProductUnit unit)
         {
             if (unit == this) return;
             Price = Price.Value < unit.Price.Value ? Price : unit.Price;
             AddProducts(unit.Count);
+        }
+
+        private void AddProducts(uint number)
+        {
+            Count += number;
         }
     }
 }

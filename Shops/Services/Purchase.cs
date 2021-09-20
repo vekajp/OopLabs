@@ -25,10 +25,5 @@ namespace Shops.Services
 
             return sum;
         }
-
-        private PurchaseUnit FindUnit(Product product)
-        {
-            return _shoppingList.Find(x => x.Product == product);
-        }
     }
 }
