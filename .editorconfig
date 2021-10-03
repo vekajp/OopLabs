@@ -72,3 +72,5 @@ dotnet_diagnostic.IDE0040.severity = warning
 
 # SA0001: XML comment analysis disabled
 dotnet_diagnostic.SA0001.severity = none
+
+dotnet_diagnostic.SA1602.severity = none

@@ -8,7 +8,7 @@ namespace Isu.Services
         private const int MaxCourse = 5;
         public CourseNumber(int number)
         {
-            if (number is > MaxCourse or < MinCourse) throw new ArgumentOutOfRangeException("number");
+            if (number is > MaxCourse or < MinCourse) throw new ArgumentOutOfRangeException(nameof(number));
             Number = number;
         }
 
