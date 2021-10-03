@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
-using Isu.Services;
-using Isu.TimeEntities;
 using IsuExtra.StructureEntities;
+using IsuExtra.TimeEntities;
 using NUnit.Framework;
-using TimeSpan = Isu.TimeEntities.TimeSpan;
+using TimeSpan = IsuExtra.TimeEntities.TimeSpan;
 
 namespace IsuExtra.Tests
 {
@@ -40,9 +39,9 @@ namespace IsuExtra.Tests
             Schedule schedule3 = scheduleBuilder.MakeSchedule();
             
             //Create groups
-            Group gr1 = new Group("M3200", schedule1);
-            Group gr2 = new Group("P3202", schedule2);
-            Group gr3 = new Group("N3204", schedule3);
+            IsuGroup gr1 = new IsuGroup("M3200", schedule1);
+            IsuGroup gr2 = new IsuGroup("P3202", schedule2);
+            IsuGroup gr3 = new IsuGroup("N3204", schedule3);
             
             _isuExtra.AddGroup(gr1);
             _isuExtra.AddGroup(gr2);
@@ -59,7 +58,7 @@ namespace IsuExtra.Tests
                 new TimeSpan(AcademicClass.Two),
                 "teacher1",
                 1);
-            electiveBuilder.AddDivision(new Division("1", scheduleBuilder.MakeSchedule()));
+            electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
             _isuExtra.AddElective(electiveBuilder.MakeElective());
             
             scheduleBuilder.Destroy();
@@ -68,8 +67,8 @@ namespace IsuExtra.Tests
                 new TimeSpan(AcademicClass.Two),
                 "teacher2",
                 2);
-            electiveBuilder.AddDivision(new Division("1", scheduleBuilder.MakeSchedule()));
-            electiveBuilder.AddDivision(new Division("2", scheduleBuilder.MakeSchedule()));
+            electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
+            electiveBuilder.AddDivision(new ElectiveGroup("2", scheduleBuilder.MakeSchedule()));
             _isuExtra.AddElective(electiveBuilder.MakeElective());
             
             scheduleBuilder.Destroy();
@@ -78,7 +77,7 @@ namespace IsuExtra.Tests
                 new TimeSpan(AcademicClass.Two),
                 "teacher3",
                 3);
-            electiveBuilder.AddDivision(new Division("1", scheduleBuilder.MakeSchedule()));
+            electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
             _isuExtra.AddElective(electiveBuilder.MakeElective());
             
             scheduleBuilder.Destroy();
@@ -87,7 +86,7 @@ namespace IsuExtra.Tests
                 new TimeSpan(AcademicClass.Six),
                 "teacher3",
                 3);
-            electiveBuilder.AddDivision(new Division("1", scheduleBuilder.MakeSchedule()));
+            electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
             _isuExtra.AddElective(electiveBuilder.MakeElective());
         }
         
@@ -97,8 +96,8 @@ namespace IsuExtra.Tests
             Faculty ftf = _isuExtra.GetFacultyByName("FTF");
             ElectiveBuilder electiveBuilder = new ElectiveBuilder("Photonics", ftf);
             
-            electiveBuilder.AddDivision(new Division("group1", null));
-            electiveBuilder.AddDivision(new Division("group2", null));
+            electiveBuilder.AddDivision(new ElectiveGroup("group1", null));
+            electiveBuilder.AddDivision(new ElectiveGroup("group2", null));
             _isuExtra.AddElective(electiveBuilder.MakeElective());
             
             Elective elective = _isuExtra.GetElectiveById("Photonics");
@@ -118,39 +117,39 @@ namespace IsuExtra.Tests
         [Test]
         public void TestCheckInAndCheckOut()
         {
-            Student student = new Student("student_test", _isuExtra.FindGroupByName("M3200"));
-            _isuExtra.AddStudent(student);
+            IsuStudent isuStudent = new IsuStudent("student_test", _isuExtra.FindGroupByName("M3200"));
+            _isuExtra.AddStudent(isuStudent);
             Elective ftfOgnp = _isuExtra.GetElectiveById("ognp_ftf");
             Elective smthOgnp = _isuExtra.GetElectiveById("ognp_smth");
             
-            Assert.That(_isuExtra.StudentsNotCheckedIn().Contains(student));
-            _isuExtra.RegisterStudent(student, ftfOgnp, "1");
-            Assert.That(_isuExtra.StudentsNotCheckedIn().Contains(student));
-            _isuExtra.RegisterStudent(student, smthOgnp, "1");
-            Assert.That(!_isuExtra.StudentsNotCheckedIn().Contains(student));
+            Assert.That(_isuExtra.StudentsNotCheckedIn().Contains(isuStudent));
+            _isuExtra.RegisterStudent(isuStudent, ftfOgnp, "1");
+            Assert.That(_isuExtra.StudentsNotCheckedIn().Contains(isuStudent));
+            _isuExtra.RegisterStudent(isuStudent, smthOgnp, "1");
+            Assert.That(!_isuExtra.StudentsNotCheckedIn().Contains(isuStudent));
 
-            Assert.That(_isuExtra.GetStudents(ftfOgnp).Contains(student));
-            Assert.That(_isuExtra.GetStudents(smthOgnp).Contains(student));
+            Assert.That(_isuExtra.GetStudents(ftfOgnp).Contains(isuStudent));
+            Assert.That(_isuExtra.GetStudents(smthOgnp).Contains(isuStudent));
             
-            _isuExtra.DeregisterStudent(student, smthOgnp, "1");
-            Assert.That(_isuExtra.StudentsNotCheckedIn().Contains(student));
-            Assert.That(!smthOgnp.Students.Contains(student));
+            _isuExtra.DeregisterStudent(isuStudent, smthOgnp, "1");
+            Assert.That(_isuExtra.StudentsNotCheckedIn().Contains(isuStudent));
+            Assert.That(!smthOgnp.Students.Contains(isuStudent));
             
             Assert.Catch<Exception>(() =>
             {
-                _isuExtra.RegisterStudent(student, ftfOgnp, "2");
+                _isuExtra.RegisterStudent(isuStudent, ftfOgnp, "2");
             });
         }
 
         [Test]
         public void TestCheckInStudentOnHisFaculty()
         {
-            Student student = new Student("test", _isuExtra.FindGroupByName("M3200"));
-            _isuExtra.AddStudent(student);
+            IsuStudent isuStudent = new IsuStudent("test", _isuExtra.FindGroupByName("M3200"));
+            _isuExtra.AddStudent(isuStudent);
             Elective fitipOgnp = _isuExtra.GetElectiveById("ognp_fitip");
             Assert.Catch<Exception>(() =>
             {
-                _isuExtra.RegisterStudent(student, fitipOgnp, "1");
+                _isuExtra.RegisterStudent(isuStudent, fitipOgnp, "1");
             });
             
         }
@@ -158,37 +157,37 @@ namespace IsuExtra.Tests
         [Test]
         public void TestCheckInStudentOnExtraElective()
         {
-            Student student = new Student("student_test", _isuExtra.FindGroupByName("M3200"));
-            _isuExtra.AddStudent(student);
+            IsuStudent isuStudent = new IsuStudent("student_test", _isuExtra.FindGroupByName("M3200"));
+            _isuExtra.AddStudent(isuStudent);
             Elective ftfOgnp = _isuExtra.GetElectiveById("ognp_ftf");
             Elective smthOgnp = _isuExtra.GetElectiveById("ognp_smth");
             Elective extraOgnp = _isuExtra.GetElectiveById("ognp_extra");
             
-            _isuExtra.RegisterStudent(student, ftfOgnp, "1");
-            _isuExtra.RegisterStudent(student, smthOgnp, "1");
+            _isuExtra.RegisterStudent(isuStudent, ftfOgnp, "1");
+            _isuExtra.RegisterStudent(isuStudent, smthOgnp, "1");
             Assert.Catch<Exception>(() =>
             {
-                _isuExtra.RegisterStudent(student, extraOgnp, "1");
+                _isuExtra.RegisterStudent(isuStudent, extraOgnp, "1");
             });
         }
         
         [Test]
         public void TestCheckInStudentOnScheduleIntersects()
         {
-            Student student = new Student("student_test", _isuExtra.FindGroupByName("M3200"));
-            _isuExtra.AddStudent(student);
+            IsuStudent isuStudent = new IsuStudent("student_test", _isuExtra.FindGroupByName("M3200"));
+            _isuExtra.AddStudent(isuStudent);
             ElectiveBuilder electiveBuilder = new ElectiveBuilder("ognp_extra", _isuExtra.GetFacultyByName("SMTH"));
             ScheduleBuilder scheduleBuilder = new ScheduleBuilder();
             scheduleBuilder.AddLesson(DayOfWeek.Monday,
                 new TimeSpan(AcademicClass.One),
                 "teacher3",
                 3);
-            electiveBuilder.AddDivision(new Division("1", scheduleBuilder.MakeSchedule()));
+            electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
             Elective elective = electiveBuilder.MakeElective();
             _isuExtra.AddElective(elective);
             Assert.Catch<Exception>(() =>
             {
-                _isuExtra.RegisterStudent(student, elective, "1");
+                _isuExtra.RegisterStudent(isuStudent, elective, "1");
             });
         }
     }

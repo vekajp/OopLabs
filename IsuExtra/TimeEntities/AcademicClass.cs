@@ -1,4 +1,4 @@
-namespace Isu.TimeEntities
+namespace IsuExtra.TimeEntities
 {
     public enum AcademicClass
     {

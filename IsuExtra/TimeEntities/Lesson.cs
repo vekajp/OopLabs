@@ -1,7 +1,6 @@
 using System;
-using TimeSpan = Isu.TimeEntities.TimeSpan;
 
-namespace Isu.TimeEntities
+namespace IsuExtra.TimeEntities
 {
     public class Lesson
     {

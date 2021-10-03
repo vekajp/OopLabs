@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Isu.Services;
 
 namespace IsuExtra.StructureEntities
 {
@@ -13,12 +12,12 @@ namespace IsuExtra.StructureEntities
             _faculties = new List<Faculty>();
         }
 
-        public IReadOnlyList<Student> Students
+        public IReadOnlyList<IsuStudent> Students
         {
             get
             {
-                var students = new List<Student>();
-                foreach (Group @group in _faculties.SelectMany(faculty => faculty.Groups))
+                var students = new List<IsuStudent>();
+                foreach (IsuGroup @group in _faculties.SelectMany(faculty => faculty.Groups))
                 {
                     students.AddRange(@group.Students);
                 }
@@ -41,36 +40,36 @@ namespace IsuExtra.StructureEntities
             _faculties.Remove(faculty);
         }
 
-        public Faculty FindFacultyByGroup(Group group)
+        public Faculty FindFacultyByGroup(IsuGroup group)
         {
             return _faculties.Find(x => x.GroupBelongsToTheFaculty(group));
         }
 
-        public Faculty FindFacultyByStudent(Student student)
+        public Faculty FindFacultyByStudent(IsuStudent student)
         {
             return _faculties.Find(x => x.ContainsGroup(student.Group));
         }
 
-        public void AddGroup(Group group)
+        public void AddGroup(IsuGroup group)
         {
             Faculty faculty = FindFacultyByGroup(group);
-            if (faculty == null) throw new ArgumentException("Group doesn't belong to any of faculties", nameof(@group));
+            if (faculty == null) throw new ArgumentException("IsuGroup doesn't belong to any of faculties", nameof(@group));
 
             faculty.AddGroup(group);
         }
 
-        public void AddStudent(Student student)
+        public void AddStudent(IsuStudent student)
         {
             student.Group.AddStudent(student);
         }
 
-        public Group FindGroupByName(string name)
+        public IsuGroup FindGroupByName(string name)
         {
-            Group group = new Group(name);
+            IsuGroup group = new IsuGroup(name, null);
             return _faculties.Find(x => x.GroupBelongsToTheFaculty(group))?.FindGroupByName(name);
         }
 
-        public IEnumerable<Student> GetStudentsByGroup(Group @group)
+        public IEnumerable<IsuStudent> GetStudentsByGroup(IsuGroup @group)
         {
             return group.Students;
         }
@@ -83,7 +82,7 @@ namespace IsuExtra.StructureEntities
             return faculty;
         }
 
-        public Faculty GetFaculty(Group group)
+        public Faculty GetFaculty(IsuGroup group)
         {
             Faculty faculty = _faculties.Find(x => x.GroupBelongsToTheFaculty(group));
             if (faculty == null) throw new ArgumentException("Faculty not found", nameof(@group));

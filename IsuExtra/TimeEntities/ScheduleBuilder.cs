@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Isu.TimeEntities
+namespace IsuExtra.TimeEntities
 {
     public class ScheduleBuilder
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Isu.TimeEntities
+namespace IsuExtra.TimeEntities
 {
     public class Time : IComparable<Time>
     {

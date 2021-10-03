@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Isu.Services;
 
 namespace IsuExtra.StructureEntities
 {
@@ -7,17 +6,17 @@ namespace IsuExtra.StructureEntities
     {
         private string _id;
         private Faculty _faculty;
-        private List<Division> _divisions;
+        private List<ElectiveGroup> _divisions;
         public ElectiveBuilder(string electiveId, Faculty faculty)
         {
             _id = electiveId;
             _faculty = faculty;
-            _divisions = new List<Division>();
+            _divisions = new List<ElectiveGroup>();
         }
 
-        public void AddDivision(Division division)
+        public void AddDivision(ElectiveGroup electiveGroup)
         {
-            _divisions.Add(division);
+            _divisions.Add(electiveGroup);
         }
 
         public Elective MakeElective()

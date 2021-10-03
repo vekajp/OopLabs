@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Isu.Services;
 
 namespace IsuExtra.StructureEntities
 {
@@ -25,7 +24,7 @@ namespace IsuExtra.StructureEntities
             _electives.Add(elective);
         }
 
-        public void RegisterStudent(Student student, Elective elective, string @group)
+        public void RegisterStudent(IsuStudent student, Elective elective, string @group)
         {
             if (StudentCheckedIn(student))
             {
@@ -35,22 +34,22 @@ namespace IsuExtra.StructureEntities
             elective.AddStudent(student, group);
         }
 
-        public void DeregisterStudent(Student student, Elective elective, string @group)
+        public void DeregisterStudent(IsuStudent student, Elective elective, string @group)
         {
            elective.RemoveStudent(student, group);
         }
 
-        public IEnumerable<Student> GetStudentsFromDivision(Division division)
+        public IEnumerable<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup)
         {
-            return division.Students;
+            return electiveGroup.Students;
         }
 
-        public IEnumerable<Student> GetStudentsFromDivision(Elective elective, string @group)
+        public IEnumerable<IsuStudent> GetStudentsFromDivision(Elective elective, string @group)
         {
             return elective.GetStudents(group);
         }
 
-        public IEnumerable<Student> GetStudents(Elective elective)
+        public IEnumerable<IsuStudent> GetStudents(Elective elective)
         {
             return elective.Students;
         }
@@ -66,19 +65,19 @@ namespace IsuExtra.StructureEntities
             return elective;
         }
 
-        public IEnumerable<Division> GetDivisions(Elective elective)
+        public IEnumerable<ElectiveGroup> GetDivisions(Elective elective)
         {
             return elective.Divisions;
         }
 
-        public bool StudentCheckedIn(Student student)
+        public bool StudentCheckedIn(IsuStudent isuStudent)
         {
-            return CountElectives(student) == MinElectives;
+            return CountElectives(isuStudent) == MinElectives;
         }
 
-        private int CountElectives(Student student)
+        private int CountElectives(IsuStudent isuStudent)
         {
-            return _electives.Count(x => x.Students.Contains(student));
+            return _electives.Count(x => x.Students.Contains(isuStudent));
         }
     }
 }

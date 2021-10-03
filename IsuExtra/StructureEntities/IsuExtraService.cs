@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Isu.Services;
 
 namespace IsuExtra.StructureEntities
 {
@@ -30,32 +29,32 @@ namespace IsuExtra.StructureEntities
             return _facultyManager.GetFacultyByName(name);
         }
 
-        public Faculty FindFacultyByGroup(Group @group)
+        public Faculty FindFacultyByGroup(IsuGroup @group)
         {
             return _facultyManager.FindFacultyByGroup(group);
         }
 
-        public Faculty FindFacultyByStudent(Student student)
+        public Faculty FindFacultyByStudent(IsuStudent student)
         {
             return _facultyManager.FindFacultyByStudent(student);
         }
 
-        public void AddGroup(Group group)
+        public void AddGroup(IsuGroup group)
         {
             _facultyManager.AddGroup(group);
         }
 
-        public void AddStudent(Student student)
+        public void AddStudent(IsuStudent student)
         {
             _facultyManager.AddStudent(student);
         }
 
-        public Group FindGroupByName(string name)
+        public IsuGroup FindGroupByName(string name)
         {
             return _facultyManager.FindGroupByName(name);
         }
 
-        public IEnumerable<Student> GetStudentsByGroup(Group @group)
+        public IEnumerable<IsuStudent> GetStudentsByGroup(IsuGroup @group)
         {
             return group.Students;
         }
@@ -65,27 +64,27 @@ namespace IsuExtra.StructureEntities
             _electiveManager.AddElective(elective);
         }
 
-        public void RegisterStudent(Student student, Elective elective, string @group)
+        public void RegisterStudent(IsuStudent student, Elective elective, string @group)
         {
             _electiveManager.RegisterStudent(student, elective, group);
         }
 
-        public void DeregisterStudent(Student student, Elective elective, string @group)
+        public void DeregisterStudent(IsuStudent student, Elective elective, string @group)
         {
             _electiveManager.DeregisterStudent(student, elective, group);
         }
 
-        public IEnumerable<Student> GetStudentsFromDivision(Division division)
+        public IEnumerable<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup)
         {
-            return _electiveManager.GetStudentsFromDivision(division);
+            return _electiveManager.GetStudentsFromDivision(electiveGroup);
         }
 
-        public IEnumerable<Student> GetStudentsFromDivision(Elective elective, string @group)
+        public IEnumerable<IsuStudent> GetStudentsFromDivision(Elective elective, string @group)
         {
             return _electiveManager.GetStudentsFromDivision(elective, group);
         }
 
-        public IEnumerable<Student> GetStudents(Elective elective)
+        public IEnumerable<IsuStudent> GetStudents(Elective elective)
         {
             return _electiveManager.GetStudents(elective);
         }
@@ -95,12 +94,12 @@ namespace IsuExtra.StructureEntities
             return _electiveManager.GetElectiveById(id);
         }
 
-        public IEnumerable<Division> GetDivisions(Elective elective)
+        public IEnumerable<ElectiveGroup> GetDivisions(Elective elective)
         {
             return elective.Divisions;
         }
 
-        public IEnumerable<Student> StudentsNotCheckedIn()
+        public IEnumerable<IsuStudent> StudentsNotCheckedIn()
         {
             return _facultyManager.Students.Where(x => !_electiveManager.StudentCheckedIn(x));
         }

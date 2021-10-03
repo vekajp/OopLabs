@@ -1,27 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Isu.Services;
 
 namespace IsuExtra.StructureEntities
 {
     public class Elective
     {
-        private List<Division> _divisions;
-        public Elective(string id, Faculty faculty, List<Division> divisions)
+        private List<ElectiveGroup> _divisions;
+        public Elective(string id, Faculty faculty, List<ElectiveGroup> divisions)
         {
             Id = id;
             Faculty = faculty;
             _divisions = divisions;
         }
 
-        public IReadOnlyList<Division> Divisions => _divisions;
+        public IReadOnlyList<ElectiveGroup> Divisions => _divisions;
 
-        public IEnumerable<Student> Students
+        public IEnumerable<IsuStudent> Students
         {
             get
             {
-                IEnumerable<Student> students = new List<Student>();
+                IEnumerable<IsuStudent> students = new List<IsuStudent>();
                 return _divisions.Aggregate(students, (current, division) => current.Concat(division.Students));
             }
         }
@@ -29,10 +28,10 @@ namespace IsuExtra.StructureEntities
         public Faculty Faculty { get; }
         public string Id { get; }
 
-        public void AddStudent(Student student, string id)
+        public void AddStudent(IsuStudent student, string id)
         {
-            Division division = FindDivisionById(id);
-            if (division == null)
+            ElectiveGroup electiveGroup = FindDivisionById(id);
+            if (electiveGroup == null)
             {
                 throw new ArgumentException("Division not found", nameof(id));
             }
@@ -47,42 +46,42 @@ namespace IsuExtra.StructureEntities
                 throw new ArgumentException("Cannot register student for the same elective twice", nameof(student));
             }
 
-            division.AddStudent(student);
+            electiveGroup.AddStudent(student);
         }
 
-        public void RemoveStudent(Student student, string id)
+        public void RemoveStudent(IsuStudent student, string id)
         {
-            Division division = FindDivisionById(id);
-            if (division == null)
+            ElectiveGroup electiveGroup = FindDivisionById(id);
+            if (electiveGroup == null)
             {
                 throw new ArgumentException("Division not found", nameof(id));
             }
 
-            division.RemoveStudent(student);
+            electiveGroup.RemoveStudent(student);
         }
 
-        public IEnumerable<Student> GetStudents(string id)
+        public IEnumerable<IsuStudent> GetStudents(string id)
         {
-            Division division = FindDivisionById(id);
-            if (division == null)
+            ElectiveGroup electiveGroup = FindDivisionById(id);
+            if (electiveGroup == null)
             {
                 throw new ArgumentException("Division not found", nameof(id));
             }
 
-            return division.Students;
+            return electiveGroup.Students;
         }
 
-        private Division FindDivisionById(string id)
+        private ElectiveGroup FindDivisionById(string id)
         {
             return _divisions.Find(x => x.Id == id);
         }
 
-        private Division FindDivisionByStudent(Student student)
+        private ElectiveGroup FindDivisionByStudent(IsuStudent student)
         {
             return _divisions.Find(x => x.ContainsStudent(student));
         }
 
-        private bool StudentIsRegistered(Student student)
+        private bool StudentIsRegistered(IsuStudent student)
         {
             return FindDivisionByStudent(student) != null;
         }

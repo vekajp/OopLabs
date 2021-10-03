@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
-using Isu.Services;
 
 namespace IsuExtra.StructureEntities
 {
     public class Faculty
     {
-        private List<Group> _groups;
+        private List<IsuGroup> _groups;
         private char _sign;
         public Faculty(string name, char sign)
         {
             Name = name;
-            _groups = new List<Group>();
+            _groups = new List<IsuGroup>();
             _sign = sign;
         }
 
         public string Name { get; }
-        public IReadOnlyList<Group> Groups => _groups;
+        public IReadOnlyList<IsuGroup> Groups => _groups;
         public override bool Equals(object obj)
         {
             if (obj != null && (obj.GetType() != this.GetType())) return false;
@@ -28,17 +27,17 @@ namespace IsuExtra.StructureEntities
             return Name.GetHashCode();
         }
 
-        public bool ContainsGroup(Group group)
+        public bool ContainsGroup(IsuGroup group)
         {
             return _groups.Contains(group);
         }
 
-        public bool GroupBelongsToTheFaculty(Group group)
+        public bool GroupBelongsToTheFaculty(IsuGroup group)
         {
             return group.GetSign() == _sign;
         }
 
-        public void AddGroup(Group group)
+        public void AddGroup(IsuGroup group)
         {
             if (ContainsGroup(group))
             {
@@ -48,7 +47,7 @@ namespace IsuExtra.StructureEntities
             _groups.Add(group);
         }
 
-        public Group FindGroupByName(string name)
+        public IsuGroup FindGroupByName(string name)
         {
             return _groups.Find(x => x.Name == name);
         }

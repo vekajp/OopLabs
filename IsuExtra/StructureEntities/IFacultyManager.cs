@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Isu.Services;
-using Isu.TimeEntities;
 
 namespace IsuExtra.StructureEntities
 {
@@ -10,15 +8,15 @@ namespace IsuExtra.StructureEntities
         public void DeleteFaculty(Faculty faculty);
 
         public Faculty GetFacultyByName(string name);
-        public Faculty FindFacultyByGroup(Group group);
+        public Faculty FindFacultyByGroup(IsuGroup group);
 
-        public Faculty FindFacultyByStudent(Student student);
+        public Faculty FindFacultyByStudent(IsuStudent student);
 
-        public void AddGroup(Group group);
-        public void AddStudent(Student student);
+        public void AddGroup(IsuGroup group);
+        public void AddStudent(IsuStudent student);
 
-        public Group FindGroupByName(string name);
+        public IsuGroup FindGroupByName(string name);
 
-        public IEnumerable<Student> GetStudentsByGroup(Group group);
+        public IEnumerable<IsuStudent> GetStudentsByGroup(IsuGroup group);
     }
 }
