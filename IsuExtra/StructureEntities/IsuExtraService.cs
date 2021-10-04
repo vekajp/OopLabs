@@ -54,7 +54,7 @@ namespace IsuExtra.StructureEntities
             return _facultyManager.FindGroupByName(name);
         }
 
-        public IEnumerable<IsuStudent> GetStudentsByGroup(IsuGroup @group)
+        public IReadOnlyCollection<IsuStudent> GetStudentsByGroup(IsuGroup @group)
         {
             return group.Students;
         }
@@ -74,17 +74,17 @@ namespace IsuExtra.StructureEntities
             _electiveManager.DeregisterStudent(student, elective, group);
         }
 
-        public IEnumerable<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup)
+        public IReadOnlyCollection<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup)
         {
             return _electiveManager.GetStudentsFromDivision(electiveGroup);
         }
 
-        public IEnumerable<IsuStudent> GetStudentsFromDivision(Elective elective, string @group)
+        public IReadOnlyCollection<IsuStudent> GetStudentsFromDivision(Elective elective, string @group)
         {
             return _electiveManager.GetStudentsFromDivision(elective, group);
         }
 
-        public IEnumerable<IsuStudent> GetStudents(Elective elective)
+        public IReadOnlyCollection<IsuStudent> GetStudents(Elective elective)
         {
             return _electiveManager.GetStudents(elective);
         }
@@ -94,14 +94,14 @@ namespace IsuExtra.StructureEntities
             return _electiveManager.GetElectiveById(id);
         }
 
-        public IEnumerable<ElectiveGroup> GetDivisions(Elective elective)
+        public IReadOnlyCollection<ElectiveGroup> GetDivisions(Elective elective)
         {
             return elective.Divisions;
         }
 
-        public IEnumerable<IsuStudent> StudentsNotCheckedIn()
+        public IReadOnlyCollection<IsuStudent> StudentsNotCheckedIn()
         {
-            return _facultyManager.Students.Where(x => !_electiveManager.StudentCheckedIn(x));
+            return _facultyManager.Students.Where(x => !_electiveManager.StudentCheckedIn(x)).ToList();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace IsuExtra.StructureEntities
         private Student _student;
         public IsuStudent(string name, IsuGroup group)
         {
-            _student = new Student(name, null);
+            _student = new Student(name, group);
             Group = group;
         }
 

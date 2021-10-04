@@ -13,7 +13,12 @@ namespace IsuExtra.TimeEntities
 
         public bool Intersects(Schedule other)
         {
-            return (from lesson in _lessons from otherLesson in other._lessons where otherLesson.Intersects(lesson) select lesson).Any();
+            return _lessons.Any(other.IntersectsWithLesson);
+        }
+
+        private bool IntersectsWithLesson(Lesson otherLesson)
+        {
+            return _lessons.Any(lesson => lesson.Intersects(otherLesson));
         }
     }
 }

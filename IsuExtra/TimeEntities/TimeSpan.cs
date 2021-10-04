@@ -26,23 +26,23 @@ namespace IsuExtra.TimeEntities
                     _begin = new Time(8, 20);
                     _end = new Time(9, 50);
                     break;
-                case AcademicClass.Two:
+                case AcademicClass.Second:
                     _begin = new Time(10, 0);
                     _end = new Time(11, 30);
                     break;
-                case AcademicClass.Three:
+                case AcademicClass.Third:
                     _begin = new Time(11, 40);
                     _end = new Time(13, 10);
                     break;
-                case AcademicClass.Four:
+                case AcademicClass.Fourth:
                     _begin = new Time(13, 30);
                     _end = new Time(15, 00);
                     break;
-                case AcademicClass.Five:
+                case AcademicClass.Fifth:
                     _begin = new Time(15, 20);
                     _end = new Time(16, 50);
                     break;
-                case AcademicClass.Six:
+                case AcademicClass.Sixth:
                     _begin = new Time(17, 00);
                     _end = new Time(18, 30);
                     break;

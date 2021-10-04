@@ -39,17 +39,17 @@ namespace IsuExtra.StructureEntities
            elective.RemoveStudent(student, group);
         }
 
-        public IEnumerable<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup)
+        public IReadOnlyCollection<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup)
         {
             return electiveGroup.Students;
         }
 
-        public IEnumerable<IsuStudent> GetStudentsFromDivision(Elective elective, string @group)
+        public IReadOnlyCollection<IsuStudent> GetStudentsFromDivision(Elective elective, string @group)
         {
             return elective.GetStudents(group);
         }
 
-        public IEnumerable<IsuStudent> GetStudents(Elective elective)
+        public IReadOnlyCollection<IsuStudent> GetStudents(Elective elective)
         {
             return elective.Students;
         }
@@ -65,7 +65,7 @@ namespace IsuExtra.StructureEntities
             return elective;
         }
 
-        public IEnumerable<ElectiveGroup> GetDivisions(Elective elective)
+        public IReadOnlyCollection<ElectiveGroup> GetDivisions(Elective elective)
         {
             return elective.Divisions;
         }

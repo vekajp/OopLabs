@@ -13,7 +13,7 @@ namespace IsuExtra.StructureEntities
             Schedule = schedule;
         }
 
-        public IEnumerable<IsuStudent> Students
+        public IReadOnlyCollection<IsuStudent> Students
         {
             get
             {
@@ -25,7 +25,7 @@ namespace IsuExtra.StructureEntities
 
         public string Name => Group.Name;
         private Group Group { get; }
-
+        public static implicit operator Group(IsuGroup group) => group.Group;
         public virtual void AddStudent(IsuStudent isuStudent)
         {
             Group.AddStudent(isuStudent);

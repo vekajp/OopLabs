@@ -4,15 +4,15 @@ namespace IsuExtra.StructureEntities
 {
     public interface IElectiveManager
     {
-        public void AddElective(Elective elective);
-        public void RegisterStudent(IsuStudent student, Elective elective, string group);
-        public void DeregisterStudent(IsuStudent student, Elective elective, string group);
-        public IEnumerable<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup);
-        public IEnumerable<IsuStudent> GetStudentsFromDivision(Elective elective, string group);
-        public IEnumerable<IsuStudent> GetStudents(Elective elective);
+        void AddElective(Elective elective);
+        void RegisterStudent(IsuStudent student, Elective elective, string group);
+        void DeregisterStudent(IsuStudent student, Elective elective, string group);
+        IReadOnlyCollection<IsuStudent> GetStudentsFromDivision(ElectiveGroup electiveGroup);
+        IReadOnlyCollection<IsuStudent> GetStudentsFromDivision(Elective elective, string group);
+        IReadOnlyCollection<IsuStudent> GetStudents(Elective elective);
 
-        public Elective GetElectiveById(string id);
+        Elective GetElectiveById(string id);
 
-        public IEnumerable<ElectiveGroup> GetDivisions(Elective elective);
+        IReadOnlyCollection<ElectiveGroup> GetDivisions(Elective elective);
     }
 }

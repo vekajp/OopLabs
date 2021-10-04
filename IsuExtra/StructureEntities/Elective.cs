@@ -14,14 +14,13 @@ namespace IsuExtra.StructureEntities
             _divisions = divisions;
         }
 
-        public IReadOnlyList<ElectiveGroup> Divisions => _divisions;
+        public IReadOnlyCollection<ElectiveGroup> Divisions => _divisions;
 
-        public IEnumerable<IsuStudent> Students
+        public IReadOnlyCollection<IsuStudent> Students
         {
             get
             {
-                IEnumerable<IsuStudent> students = new List<IsuStudent>();
-                return _divisions.Aggregate(students, (current, division) => current.Concat(division.Students));
+                return _divisions.SelectMany(division => division.Students).ToList();
             }
         }
 
@@ -60,7 +59,7 @@ namespace IsuExtra.StructureEntities
             electiveGroup.RemoveStudent(student);
         }
 
-        public IEnumerable<IsuStudent> GetStudents(string id)
+        public IReadOnlyCollection<IsuStudent> GetStudents(string id)
         {
             ElectiveGroup electiveGroup = FindDivisionById(id);
             if (electiveGroup == null)

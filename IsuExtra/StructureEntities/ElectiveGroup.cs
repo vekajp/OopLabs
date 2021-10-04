@@ -17,7 +17,7 @@ namespace IsuExtra.StructureEntities
         }
 
         public Schedule Schedule { get; }
-        public IReadOnlyList<IsuStudent> Students => _students;
+        public IReadOnlyCollection<IsuStudent> Students => _students;
         public string Id { get; }
 
         public void AddStudent(IsuStudent student)

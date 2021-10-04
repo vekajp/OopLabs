@@ -4,6 +4,6 @@ namespace IsuExtra.StructureEntities
 {
     public interface IIsuExtraService : IElectiveManager, IFacultyManager
     {
-        public IEnumerable<IsuStudent> StudentsNotCheckedIn();
+        IReadOnlyCollection<IsuStudent> StudentsNotCheckedIn();
     }
 }

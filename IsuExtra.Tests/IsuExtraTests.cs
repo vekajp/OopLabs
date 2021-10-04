@@ -55,7 +55,7 @@ namespace IsuExtra.Tests
             
             scheduleBuilder = new ScheduleBuilder();
             scheduleBuilder.AddLesson(DayOfWeek.Monday, 
-                new TimeSpan(AcademicClass.Two),
+                new TimeSpan(AcademicClass.Second),
                 "teacher1",
                 1);
             electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
@@ -64,7 +64,7 @@ namespace IsuExtra.Tests
             scheduleBuilder.Destroy();
             electiveBuilder = new ElectiveBuilder("ognp_ftf", ftf);
             scheduleBuilder.AddLesson(DayOfWeek.Tuesday,
-                new TimeSpan(AcademicClass.Two),
+                new TimeSpan(AcademicClass.Second),
                 "teacher2",
                 2);
             electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
@@ -74,7 +74,7 @@ namespace IsuExtra.Tests
             scheduleBuilder.Destroy();
             electiveBuilder = new ElectiveBuilder("ognp_smth", smth);
             scheduleBuilder.AddLesson(DayOfWeek.Wednesday,
-                new TimeSpan(AcademicClass.Two),
+                new TimeSpan(AcademicClass.Second),
                 "teacher3",
                 3);
             electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));
@@ -83,7 +83,7 @@ namespace IsuExtra.Tests
             scheduleBuilder.Destroy();
             electiveBuilder = new ElectiveBuilder("ognp_extra", smth);
             scheduleBuilder.AddLesson(DayOfWeek.Thursday,
-                new TimeSpan(AcademicClass.Six),
+                new TimeSpan(AcademicClass.Sixth),
                 "teacher3",
                 3);
             electiveBuilder.AddDivision(new ElectiveGroup("1", scheduleBuilder.MakeSchedule()));

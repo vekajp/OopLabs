@@ -15,7 +15,7 @@ namespace IsuExtra.StructureEntities
         }
 
         public string Name { get; }
-        public IReadOnlyList<IsuGroup> Groups => _groups;
+        public IReadOnlyCollection<IsuGroup> Groups => _groups;
         public override bool Equals(object obj)
         {
             if (obj != null && (obj.GetType() != this.GetType())) return false;
