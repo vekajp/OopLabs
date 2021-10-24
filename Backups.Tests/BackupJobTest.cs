@@ -10,7 +10,7 @@ namespace Backups.Tests
         public void SplitVirtualStorageTest()
         {
             var repo = new VirtualRepository("some path");
-            var joba = new BackupJob("job1", StorageType.SplitType, repo);
+            var joba = new BackupJob("job1", new SplitStorage(), repo);
             joba.AddObject(new VirtualFile("file1.png"));
             joba.AddObject(new VirtualFile("file2.png"));
             joba.CreateRestorePoint();
@@ -23,7 +23,7 @@ namespace Backups.Tests
         public void SingleVirtualStorageTest()
         {
             var repo = new VirtualRepository("some path");
-            var joba = new BackupJob("job1", StorageType.SingleType, repo);
+            var joba = new BackupJob("job1", new SingleStorage(), repo);
             joba.AddObject(new VirtualFile("file1.png"));
             joba.AddObject(new VirtualFile("file2.png"));
             joba.CreateRestorePoint();

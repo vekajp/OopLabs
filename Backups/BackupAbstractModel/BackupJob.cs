@@ -6,14 +6,14 @@ namespace Backups.BackupAbstractModel
     public class BackupJob
     {
         private string _name;
-        private StorageType _type;
+        private IStorage _storage;
         private IRepository _repository;
         private List<IJobObject> _objects;
         private List<RestorePoint> _points;
-        public BackupJob(string name, StorageType type, IRepository repository)
+        public BackupJob(string name, IStorage storage, IRepository repository)
         {
             _name = name;
-            _type = type;
+            _storage = storage;
             _repository = repository;
             _objects = new List<IJobObject>();
             _points = new List<RestorePoint>();
@@ -43,9 +43,9 @@ namespace Backups.BackupAbstractModel
         public void CreateRestorePoint()
         {
             var point = new RestorePoint(_objects, _name);
-            IStorage storage = Storage.GetStorage(_type, point);
             _repository.MakeRepository(point);
-            storage.Store(_repository);
+            _storage.StorePoint(point);
+            _storage.Store(_repository);
             _points.Add(point);
         }
 

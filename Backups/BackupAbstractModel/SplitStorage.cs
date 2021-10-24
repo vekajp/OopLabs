@@ -6,13 +6,14 @@ namespace Backups.BackupAbstractModel
     public class SplitStorage : IStorage
     {
         private IReadOnlyCollection<IJobObject> _objects;
-        public SplitStorage(RestorePoint point)
+        public SplitStorage()
         {
-            if (point is null)
-            {
-                throw new ArgumentNullException(nameof(point));
-            }
+            _objects = new List<IJobObject>();
+        }
 
+        public void StorePoint(RestorePoint point)
+        {
+            _ = point ?? throw new ArgumentNullException(nameof(point));
             _objects = point.Objects;
         }
 
