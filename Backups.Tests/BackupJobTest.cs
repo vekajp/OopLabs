@@ -9,7 +9,6 @@ namespace Backups.Tests
         [Test]
         public void SplitVirtualStorageTest()
         {
-            const string path = "test_backup";
             var repo = new VirtualRepository("some path");
             var joba = new BackupJob("job1", StorageType.SplitType, repo);
             joba.AddObject(new VirtualFile("file1.png"));
@@ -23,7 +22,6 @@ namespace Backups.Tests
         [Test]
         public void SingleVirtualStorageTest()
         {
-            const string path = "test_backup";
             var repo = new VirtualRepository("some path");
             var joba = new BackupJob("job1", StorageType.SingleType, repo);
             joba.AddObject(new VirtualFile("file1.png"));
