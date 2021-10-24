@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using Backups.BackupAbstractModel;
+using Backups.Client;
 using Backups.LocalBackup;
 using Backups.ServerBackup;
-using BackupsClient;
 
 namespace Backups
 {
