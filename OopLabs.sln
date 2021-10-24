@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banks", "Banks\Banks.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banks.Tests", "Banks.Tests\Banks.Tests.csproj", "{3845CD18-DD04-4B8F-B0DC-74EF9354F6DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupsServer", "BackupsServer\BackupsServer.csproj", "{0EBF87F2-FC1A-445D-8C12-72D16146BA3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupsClient", "BackupsClient\BackupsClient.csproj", "{9E5DB0B2-E042-4087-9A7E-77BBC09A125B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +90,14 @@ Global
 		{3845CD18-DD04-4B8F-B0DC-74EF9354F6DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3845CD18-DD04-4B8F-B0DC-74EF9354F6DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3845CD18-DD04-4B8F-B0DC-74EF9354F6DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EBF87F2-FC1A-445D-8C12-72D16146BA3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EBF87F2-FC1A-445D-8C12-72D16146BA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EBF87F2-FC1A-445D-8C12-72D16146BA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EBF87F2-FC1A-445D-8C12-72D16146BA3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E5DB0B2-E042-4087-9A7E-77BBC09A125B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E5DB0B2-E042-4087-9A7E-77BBC09A125B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E5DB0B2-E042-4087-9A7E-77BBC09A125B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E5DB0B2-E042-4087-9A7E-77BBC09A125B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
