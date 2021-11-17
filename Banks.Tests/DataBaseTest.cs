@@ -1,45 +1,27 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using Banks.Accounts;
 using Banks.BankSystem;
 using Banks.Client;
 using Banks.ORM;
 using Banks.Transactions;
-using Banks.UI;
 using Banks.UpdatesSubscribers;
 using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 
-namespace Banks
+namespace Banks.Tests
 {
-    internal static class Program
+    public class DataBaseTest
     {
-        private static void Main()
+        [Test]
+        public void AddSystemToDataBaseAndReceiveIt_CheckStatus()
         {
-            SaveStateToDb();
             var optionsBuilder = new DbContextOptionsBuilder<CentralBankContext>();
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseSqlite(@"Data Source=CentralBankDB.db;");
-            var db = new CentralBankContext(optionsBuilder.Options);
-            CentralBank loadedBank = db.CentralBanks.ToList().Last();
+            optionsBuilder.UseInMemoryDatabase("CentralBankDB.db;");
+            using var db = new CentralBankContext(optionsBuilder.Options);
 
-            var ui = new UserInterface(loadedBank);
-            ui.Run();
-        }
-
-        private static void SaveStateToDb()
-        {
-            CentralBank centralBank = ConstructTestCentralBank();
-            var optionsBuilder = new DbContextOptionsBuilder<CentralBankContext>();
-            optionsBuilder.UseLazyLoadingProxies();
-            optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseSqlite(@"Data Source=CentralBankDB.db;");
-            var db = new CentralBankContext(optionsBuilder.Options);
-            db.CentralBanks.Add(centralBank);
-            db.SaveChanges();
-        }
-
-        private static CentralBank ConstructTestCentralBank()
-        {
             var centralBank = new CentralBank();
             var determinator = new BankAccountTerms(3, 10,  100, 100, -1000);
             determinator.AddGap(new PercentageGap(1, 4));
@@ -72,8 +54,22 @@ namespace Banks
             centralBank.MakeTransaction(transaction);
             bank1.SubscribeClient(client1, EventType.CreditAccountTermsChange);
             bank2.SubscribeClient(client1, EventType.DebitAccountTermsChange);
+            BankClient client3 = new BankClient("veka", "jp")
+                .SetAddress("a")
+                .SetPassportNumber("2286661337");
 
-            return centralBank;
+            accountBuilder = new AccountBuilder(bank1, client3, AccountType.Debit);
+            accountBuilder.CreateAccount();
+            centralBank.RegisterClient(client3);
+            Console.WriteLine(bank1.Clients.Count);
+            db.CentralBanks.Add(centralBank);
+            db.SaveChanges();
+            
+            var cbs = db.CentralBanks.ToList();
+            Assert.AreEqual(1, cbs.Count);
+            CentralBank cb = cbs.Last();
+            Assert.AreEqual(2, cb.Banks.Count);
+            Assert.AreEqual(3, cb.Clients.Count);
         }
     }
 }
