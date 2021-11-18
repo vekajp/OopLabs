@@ -97,6 +97,7 @@ namespace Banks.Accounts
             catch
             {
                 Deposit(cash);
+                throw;
             }
         }
 
@@ -126,9 +127,8 @@ namespace Banks.Accounts
             {
                 Balance -= amount;
                 Banned = true;
+                throw;
             }
-
-            return amount;
         }
 
         public void PayCommission()

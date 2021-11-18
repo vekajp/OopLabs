@@ -1,6 +1,7 @@
 using System;
 using Banks.Accounts;
 using Banks.BankSystem;
+using Banks.BankSystem.AcountBuilding;
 using Banks.Client;
 using Banks.Transactions;
 using NUnit.Framework;
@@ -166,13 +167,10 @@ namespace Banks.Tests
         public void TestCompleteCashTransactionsAndCancelTransactions()
         {
             decimal balance1 = 10000;
-            decimal balance2 = 10000;
             var client1 = new BankClient("beb", "ra");
-            var client2 = new BankClient("shr", "eck");
             var account1 = new DebitAccount(client1, 10000, 1000, 3);
-            var account2 = new DebitAccount(client2, 10000, 1000, 3);
-            
-            
+
+
             var cashTransaction = new CashTransaction(account1, 100);
             balance1 -= 100;
             cashTransaction.Complete();
@@ -186,14 +184,11 @@ namespace Banks.Tests
         public void TestCompleteDepositTransactionsAndCancelTransactions()
         {
             decimal balance1 = 10000;
-            decimal balance2 = 10000;
             var client1 = new BankClient("beb", "ra");
-            var client2 = new BankClient("shr", "eck");
             var account1 = new DebitAccount(client1, 10000, 1000, 3);
-            var account2 = new DebitAccount(client2, 10000, 1000, 3);
-            
-            
-           var depositTransaction = new DepositTransaction(account1, 100);
+
+
+            var depositTransaction = new DepositTransaction(account1, 100);
             balance1 += 100;
             depositTransaction.Complete();
             Assert.AreEqual(account1.Balance, balance1);
@@ -206,9 +201,9 @@ namespace Banks.Tests
         public void TestDepositCommissions()
         {
             decimal initialBalance = 100;
-            var builder = new AccountBuilder(_testBank, _testClient, AccountType.Deposit);
+            var builder = new DepositAccountBuilder(_testBank, _testClient);
             builder.SetInitialBalance(initialBalance);
-            BankAccount account = builder.CreateAccount();
+            BankAccount account = builder.CreateAccountInTheBank();
 
             decimal yearPercentage = _testDeterminator.GetDepositPercentage(initialBalance);
             decimal expectedBalance = initialBalance;
@@ -228,9 +223,9 @@ namespace Banks.Tests
         public void TestDebitCommissions()
         {
             decimal initialBalance = 100;
-            var builder = new AccountBuilder(_testBank, _testClient, AccountType.Debit);
+            var builder = new DebitAccountBuilder(_testBank, _testClient);
             builder.SetInitialBalance(initialBalance);
-            BankAccount account = builder.CreateAccount();
+            BankAccount account = builder.CreateAccountInTheBank();
 
             decimal dailyPercentage = _testDeterminator.DebitAccountYearlyPercentage / 365m;
             decimal expectedBalance = initialBalance;
@@ -251,9 +246,9 @@ namespace Banks.Tests
         public void TestCreditCommission()
         {
             decimal initialBalance = -100;
-            var builder = new AccountBuilder(_testBank, _testClient, AccountType.Credit);
+            var builder = new CreditAccountBuilder(_testBank, _testClient);
             builder.SetInitialBalance(initialBalance);
-            BankAccount account = builder.CreateAccount();
+            BankAccount account = builder.CreateAccountInTheBank();
 
             decimal commission = _testDeterminator.CreditAccountCommission;
             account.Cash(100);

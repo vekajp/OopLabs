@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Banks.Accounts;
 using Banks.BankSystem;
+using Banks.BankSystem.AcountBuilding;
 using Banks.Client;
 using Banks.UpdatesSubscribers;
 using Spectre.Console;
@@ -20,14 +21,25 @@ namespace Banks.UI.ClientActions
         {
             Bank bank = SelectBank();
             AccountType type = SelectAccountType();
-            var accountBuilder = new AccountBuilder(bank, Client, type);
+            AccountBuilder accountBuilder = GetAccountBuilder(bank, Client, type);
             GetAccountExtraData(accountBuilder, type);
-            accountBuilder.CreateAccount();
+            accountBuilder.CreateAccountInTheBank();
 
             if (AnsiConsole.Confirm("Get account notifications?"))
             {
                 bank.SubscribeClient(Client, GetEventType(type));
             }
+        }
+
+        private AccountBuilder GetAccountBuilder(Bank bank, BankClient client, AccountType type)
+        {
+            return type switch
+            {
+                AccountType.Credit => new CreditAccountBuilder(bank, client),
+                AccountType.Debit => new DebitAccountBuilder(bank, client),
+                AccountType.Deposit => new DepositAccountBuilder(bank, client),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
         }
 
         private Bank SelectBank()

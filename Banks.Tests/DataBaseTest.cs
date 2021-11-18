@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Banks.Accounts;
 using Banks.BankSystem;
+using Banks.BankSystem.AcountBuilding;
 using Banks.Client;
 using Banks.ORM;
 using Banks.Transactions;
@@ -41,15 +42,15 @@ namespace Banks.Tests
                 .SetPassportNumber("02345678912");
             centralBank.RegisterClient(client1);
             centralBank.RegisterClient(client2);
-            var accountBuilder = new AccountBuilder(bank1, client1, AccountType.Credit)
+            var accountBuilder = new CreditAccountBuilder(bank1, client1)
                 .SetInitialBalance(100);
-            BankAccount account1 = accountBuilder.CreateAccount();
-            accountBuilder = new AccountBuilder(bank2, client1, AccountType.Debit);
-            accountBuilder.CreateAccount();
-            accountBuilder = new AccountBuilder(bank1, client2, AccountType.Debit);
-            BankAccount account2 = accountBuilder.CreateAccount();
-            accountBuilder = new AccountBuilder(bank2, client2, AccountType.Deposit);
-            accountBuilder.CreateAccount();
+            BankAccount account1 = accountBuilder.CreateAccountInTheBank();
+            accountBuilder = new DebitAccountBuilder(bank2, client1);
+            accountBuilder.CreateAccountInTheBank();
+            accountBuilder = new DebitAccountBuilder(bank1, client2);
+            BankAccount account2 = accountBuilder.CreateAccountInTheBank();
+            accountBuilder = new DepositAccountBuilder(bank2, client2);
+            accountBuilder.CreateAccountInTheBank();
             Transaction transaction = new P2PTransaction(account1, account2, 200);
             centralBank.MakeTransaction(transaction);
             bank1.SubscribeClient(client1, EventType.CreditAccountTermsChange);
@@ -58,8 +59,8 @@ namespace Banks.Tests
                 .SetAddress("a")
                 .SetPassportNumber("2286661337");
 
-            accountBuilder = new AccountBuilder(bank1, client3, AccountType.Debit);
-            accountBuilder.CreateAccount();
+            accountBuilder = new DebitAccountBuilder(bank1, client3);
+            accountBuilder.CreateAccountInTheBank();
             centralBank.RegisterClient(client3);
             Console.WriteLine(bank1.Clients.Count);
             db.CentralBanks.Add(centralBank);
