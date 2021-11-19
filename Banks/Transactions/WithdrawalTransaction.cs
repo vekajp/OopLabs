@@ -2,31 +2,23 @@ using Banks.Accounts;
 
 namespace Banks.Transactions
 {
-    public class CashTransaction : Transaction
+    public class WithdrawalTransaction : Transaction
     {
-        public CashTransaction(BankAccount account, decimal amount)
+        public WithdrawalTransaction(BankAccount account, decimal amount)
         : base(amount, account)
         {
             Account = account;
         }
 
-        public CashTransaction()
+        public WithdrawalTransaction()
         {
         }
 
         public virtual BankAccount Account { get; init; }
+
         public override bool Complete()
         {
-            try
-            {
-                Account.Cash(Amount);
-                Success = true;
-            }
-            catch
-            {
-                Success = false;
-            }
-
+            Success = Initiator.TryWithdraw(Amount);
             return Success;
         }
 

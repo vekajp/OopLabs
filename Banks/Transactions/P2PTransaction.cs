@@ -15,18 +15,10 @@ namespace Banks.Transactions
         }
 
         public virtual BankAccount Receiver { get; init; }
+
         public override bool Complete()
         {
-            try
-            {
-                Initiator.Transfer(Receiver, Amount);
-                Success = true;
-            }
-            catch
-            {
-                Success = false;
-            }
-
+            Success = Initiator.Transfer(Receiver, Amount);
             return Success;
         }
 

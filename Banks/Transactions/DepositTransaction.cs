@@ -15,16 +15,7 @@ namespace Banks.Transactions
 
         public override bool Complete()
         {
-            try
-            {
-                Initiator.Deposit(Amount);
-                Success = true;
-            }
-            catch
-            {
-                Success = false;
-            }
-
+            Success = Initiator.TryDeposit(Amount);
             return Success;
         }
 

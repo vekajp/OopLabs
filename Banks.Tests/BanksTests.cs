@@ -58,12 +58,12 @@ namespace Banks.Tests
             Assert.AreEqual(amount, debitAccount.Balance);
             Assert.Catch(() =>
             {
-                debitAccount.Cash(200);
+                debitAccount.WithdrawCash(200);
             });
             Assert.AreEqual(amount, debitAccount.Balance);
             client.SetAddress("K.");
             client.SetPassportNumber("8080228666");
-            debitAccount.Cash(200);
+            debitAccount.WithdrawCash(200);
             amount -= 200;
             Assert.AreEqual(amount, debitAccount.Balance);
         }
@@ -78,18 +78,18 @@ namespace Banks.Tests
             Assert.AreEqual(creditAccount.Balance, amount);
             Assert.Catch(() =>
             {
-                creditAccount.Cash(200);
+                creditAccount.WithdrawCash(200);
             });
             Assert.AreEqual(amount, creditAccount.Balance);
             client.SetAddress("K.");
             client.SetPassportNumber("8080228666");
-            creditAccount.Cash(1000);
+            creditAccount.WithdrawCash(1000);
             amount -= 1000;
             Assert.AreEqual(creditAccount.Balance, amount);
             
             Assert.Catch(() =>
             {
-                creditAccount.Cash(2000);
+                creditAccount.WithdrawCash(2000);
             });
             
             Assert.AreEqual(creditAccount.Balance, amount);
@@ -104,14 +104,14 @@ namespace Banks.Tests
             Assert.AreEqual(depositAccount.Balance, amount);
             Assert.Catch(() =>
             {
-                depositAccount.Cash(200);
+                depositAccount.WithdrawCash(200);
             });
             Assert.AreEqual(amount, depositAccount.Balance);
             depositAccount = new DepositAccount(client, 1000, 1000, DateTime.MinValue, 10);
             
             depositAccount.Deposit(100);
             Assert.AreEqual(depositAccount.Balance, amount);
-            depositAccount.Cash(200);
+            depositAccount.WithdrawCash(200);
             amount -= 200;
             Assert.AreEqual(amount, depositAccount.Balance);
         }
@@ -171,7 +171,7 @@ namespace Banks.Tests
             var account1 = new DebitAccount(client1, 10000, 1000, 3);
 
 
-            var cashTransaction = new CashTransaction(account1, 100);
+            var cashTransaction = new WithdrawalTransaction(account1, 100);
             balance1 -= 100;
             cashTransaction.Complete();
             Assert.AreEqual(account1.Balance, balance1);
@@ -251,7 +251,7 @@ namespace Banks.Tests
             BankAccount account = builder.CreateAccountInTheBank();
 
             decimal commission = _testDeterminator.CreditAccountCommission;
-            account.Cash(100);
+            account.WithdrawCash(100);
             _centralBank.PayCommissions();
             decimal expectedBalance = initialBalance - 100 - _testDeterminator.CreditAccountCommission;
             Assert.AreEqual(account.Balance, expectedBalance);

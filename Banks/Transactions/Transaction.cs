@@ -35,5 +35,18 @@ namespace Banks.Transactions
         {
             return $"{Id}({Amount})";
         }
+
+        protected bool TryComplete()
+        {
+            try
+            {
+                Complete();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

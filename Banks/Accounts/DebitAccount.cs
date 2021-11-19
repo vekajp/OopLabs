@@ -31,9 +31,7 @@ namespace Banks.Accounts
         public override BankAccount GetAccountStateByDate(DateTime day)
         {
             if (day < DateTime.Today)
-            {
                 throw new ArgumentException("Invalid date", nameof(day));
-            }
 
             var followingState = new DebitAccount(this);
             DateTime now = DateTime.Now;

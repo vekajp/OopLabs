@@ -41,7 +41,7 @@ namespace Banks.ORM
             modelBuilder.Entity<DebitAccount>();
             modelBuilder.Entity<DepositAccount>();
             modelBuilder.Entity<Transaction>();
-            modelBuilder.Entity<CashTransaction>();
+            modelBuilder.Entity<WithdrawalTransaction>();
             modelBuilder.Entity<DepositTransaction>();
             modelBuilder.Entity<P2PTransaction>();
 

@@ -49,56 +49,51 @@ namespace Banks.Accounts
         public void Deposit(decimal amount)
         {
             if (Banned)
-            {
                 throw new AccountIsBannedException();
-            }
 
             if (amount < 0)
-            {
                 throw new ArgumentException("Cannot deposit negative amount", nameof(amount));
-            }
 
             Balance += amount;
         }
 
-        public virtual decimal Cash(decimal amount)
+        public bool TryDeposit(decimal amount)
+        {
+            try
+            {
+                Deposit(amount);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public virtual decimal WithdrawCash(decimal amount)
         {
             if (Banned)
-            {
                 throw new AccountIsBannedException();
-            }
 
             if (amount < 0)
-            {
                 throw new ArgumentException("Cannot cash negative amount", nameof(amount));
-            }
 
             if (!Client.TrustWorthy && amount > TransactionLimit)
-            {
                 throw new ArgumentException("Transaction limit was exceeded", nameof(amount));
-            }
 
             if (Balance - amount < AccountLimit)
-            {
                 throw new ArgumentException("Account limit was exceeded", nameof(amount));
-            }
 
             Balance -= amount;
             return amount;
         }
 
-        public void Transfer(BankAccount receiver, decimal amount)
+        public bool Transfer(BankAccount receiver, decimal amount)
         {
-            decimal cash = Cash(amount);
-            try
-            {
-                receiver.Deposit(cash);
-            }
-            catch
-            {
-                Deposit(cash);
-                throw;
-            }
+            if (!TryWithdraw(amount)) return false;
+            if (receiver.TryDeposit(amount)) return true;
+            Deposit(amount);
+            return false;
         }
 
         public override bool Equals(object obj)
@@ -119,16 +114,10 @@ namespace Banks.Accounts
 
         public decimal ForceCash(decimal amount)
         {
-            try
-            {
-                return Cash(amount);
-            }
-            catch
-            {
-                Balance -= amount;
-                Banned = true;
-                throw;
-            }
+            if (TryWithdraw(amount)) return amount;
+            Balance -= amount;
+            Banned = true;
+            return amount;
         }
 
         public void PayCommission()
@@ -144,6 +133,19 @@ namespace Banks.Accounts
         public override string ToString()
         {
             return $"{Id.ToString()}, ({Client})";
+        }
+
+        public bool TryWithdraw(decimal amount)
+        {
+            try
+            {
+                WithdrawCash(amount);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

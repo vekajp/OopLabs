@@ -76,7 +76,7 @@ namespace Banks.UI.ClientActions
                     BankAccount receiver = ChooseAccount(account => !Equals(account, _initiator), "Select receiver account");
                     return new P2PTransaction(_initiator, receiver, amount);
                 case TransactionType.Cash:
-                    return new CashTransaction(_initiator, amount);
+                    return new WithdrawalTransaction(_initiator, amount);
                 case TransactionType.Deposit:
                     return new DepositTransaction(_initiator, amount);
                 default:

@@ -9,14 +9,10 @@ namespace Banks.Accounts
         : base(bankClient, initialBalance, transactionLimit, accountLimit)
         {
             if (accountLimit > 0)
-            {
                 throw new ArgumentException("Credit account limit must be negative number", nameof(accountLimit));
-            }
 
             if (usageCommission <= 0)
-            {
                 throw new ArgumentException("Commission must be positive number", nameof(usageCommission));
-            }
 
             UsageCommission = usageCommission;
         }
@@ -32,9 +28,9 @@ namespace Banks.Accounts
         }
 
         public decimal UsageCommission { get; private set; }
-        public override decimal Cash(decimal amount)
+        public override decimal WithdrawCash(decimal amount)
         {
-            base.Cash(amount);
+            base.WithdrawCash(amount);
             RecountCommission();
             return amount;
         }
@@ -42,17 +38,13 @@ namespace Banks.Accounts
         public override void RecountCommission()
         {
             if (Balance < 0)
-            {
                 MonthlyCommission -= UsageCommission;
-            }
         }
 
         public override BankAccount GetAccountStateByDate(DateTime day)
         {
             if (day < DateTime.Today)
-            {
                 throw new ArgumentException("Invalid date", nameof(day));
-            }
 
             return this;
         }

@@ -26,14 +26,12 @@ namespace Banks.Accounts
 
         public DateTime ExpirationDate { get; private set; }
         public decimal DailyCoefficient { get; private set; }
-        public override decimal Cash(decimal amount)
+        public override decimal WithdrawCash(decimal amount)
         {
             if (ExpirationDate > DateTime.Now)
-            {
                 throw new ArgumentException("Cannot cash money from active savings account", nameof(amount));
-            }
 
-            return base.Cash(amount);
+            return base.WithdrawCash(amount);
         }
 
         public override void RecountCommission()
