@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Backups.BackupAbstractModel;
 
 namespace Backups.VirtualBackup
@@ -8,32 +9,34 @@ namespace Backups.VirtualBackup
     {
         private string _path;
         private List<string> _restorePoints;
-        private List<string> _storages;
         public VirtualRepository(string path)
         {
             _path = path ?? throw new ArgumentNullException(nameof(path));
-            _storages = new List<string>();
+            Storages = new Dictionary<string, List<string>>();
             _restorePoints = new List<string>();
         }
 
         public IReadOnlyCollection<string> Points => _restorePoints;
-        public IReadOnlyCollection<string> Storages => _storages;
+        public Dictionary<string, List<string>> Storages { get; }
+
         public void MakeRepository(RestorePoint point)
         {
             _ = point ?? throw new ArgumentNullException(nameof(point));
             _path = point.Name;
+            _restorePoints.Add(point.Name);
+            Storages[_path] = new List<string>();
         }
 
         public void Store(IJobObject obj)
         {
             _ = obj ?? throw new ArgumentNullException(nameof(obj));
-            _storages.Add(obj.GetName());
+            Storages[_path].Add(obj.GetName());
         }
 
         public void Store(IReadOnlyCollection<IJobObject> objects)
         {
             _ = objects ?? throw new ArgumentNullException(nameof(objects));
-            _storages.Add(objects.ToString());
+            Storages[_path].Add(objects.ToString());
         }
 
         public string GetStoragePath()
@@ -43,7 +46,18 @@ namespace Backups.VirtualBackup
 
         public int StoragesCount()
         {
-            return _storages.Count;
+            return Storages.Values.Sum(storages => storages.Count);
+        }
+
+        public void RemoveRestorePoint(RestorePoint point)
+        {
+            if (!_restorePoints.Contains(point.Name))
+            {
+                throw new ArgumentException("Point is not stored", nameof(point));
+            }
+
+            _restorePoints.Remove(point.Name);
+            Storages.Remove(point.Name);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading;
 using Backups.BackupAbstractModel;
 using NUnit.Framework;
 using Backups.VirtualBackup;
@@ -14,6 +15,7 @@ namespace Backups.Tests
             joba.AddObject(new VirtualFile("file1.png"));
             joba.AddObject(new VirtualFile("file2.png"));
             joba.CreateRestorePoint();
+            Thread.Sleep(1000);
             joba.DeleteObject(new VirtualFile("file1.png"));
             joba.CreateRestorePoint();
             Assert.AreEqual(joba.PointsCount, 2);
@@ -27,6 +29,7 @@ namespace Backups.Tests
             joba.AddObject(new VirtualFile("file1.png"));
             joba.AddObject(new VirtualFile("file2.png"));
             joba.CreateRestorePoint();
+            Thread.Sleep(1000);
             joba.DeleteObject(new VirtualFile("file1.png"));
             joba.CreateRestorePoint();
             Assert.AreEqual(joba.PointsCount, 2);
