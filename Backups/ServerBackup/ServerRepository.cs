@@ -35,7 +35,7 @@ namespace Backups.ServerBackup
         {
             _ = objects ?? throw new ArgumentNullException(nameof(objects));
             _repo.Store(objects);
-            string storePath = _repo.GetStorePath();
+            string storePath = _repo.GetStoragePath();
             string[] zipFiles = Directory.GetFiles(storePath);
             if (zipFiles.Length != 1)
             {
@@ -44,6 +44,11 @@ namespace Backups.ServerBackup
 
             var file = new ServerFile(zipFiles[0]);
             Store(file);
+        }
+
+        public string GetStoragePath()
+        {
+            return _repo.GetStoragePath();
         }
 
         public void Dispose()

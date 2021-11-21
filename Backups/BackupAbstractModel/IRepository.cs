@@ -7,5 +7,7 @@ namespace Backups.BackupAbstractModel
         void MakeRepository(RestorePoint point);
         void Store(IJobObject obj);
         void Store(IReadOnlyCollection<IJobObject> objects);
+
+        string GetStoragePath();
     }
 }

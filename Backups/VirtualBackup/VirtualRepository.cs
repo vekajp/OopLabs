@@ -32,6 +32,11 @@ namespace Backups.VirtualBackup
             _storages.Add(objects.ToString());
         }
 
+        public string GetStoragePath()
+        {
+            return _path;
+        }
+
         public int StoragesCount()
         {
             return _storages.Count;

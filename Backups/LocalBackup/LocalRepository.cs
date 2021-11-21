@@ -49,7 +49,7 @@ namespace Backups.LocalBackup
             Thread.Sleep(1000);
         }
 
-        public string GetStorePath()
+        public string GetStoragePath()
         {
             return _repoPath;
         }
