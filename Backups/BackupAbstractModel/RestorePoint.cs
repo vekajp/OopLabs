@@ -5,7 +5,7 @@ namespace Backups.BackupAbstractModel
 {
     public class RestorePoint
     {
-        private const string DateFormat = "dd-MM-yyyy(HH:mm:ss)";
+        private const string DateFormat = "yyyy-MM-dd(HH:mm:ss)";
         private DateTime _dateCreated;
         private List<IJobObject> _objects;
         public RestorePoint(List<IJobObject> objects, string jobName)

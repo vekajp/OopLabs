@@ -51,7 +51,7 @@ namespace Backups.LocalBackup
 
         public string GetStoragePath()
         {
-            return _repoPath;
+            return _storagePath;
         }
 
         public void Delete()

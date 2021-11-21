@@ -20,6 +20,8 @@ namespace Backups.BackupAbstractModel
         }
 
         public int PointsCount => _points.Count;
+        public IReadOnlyCollection<RestorePoint> Points => _points;
+        public IRepository Repository => _repository;
         public void AddObject(IJobObject obj)
         {
             if (_objects.Contains(obj))
@@ -47,6 +49,16 @@ namespace Backups.BackupAbstractModel
             _storage.StorePoint(point);
             _storage.Store(_repository);
             _points.Add(point);
+        }
+
+        public void DeleteRestorePoint(RestorePoint point)
+        {
+            if (!_points.Contains(point))
+            {
+                throw new ArgumentException("Point is not in a job", nameof(point));
+            }
+
+            _points.Remove(point);
         }
 
         public void Clear()

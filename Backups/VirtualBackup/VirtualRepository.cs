@@ -7,13 +7,17 @@ namespace Backups.VirtualBackup
     public class VirtualRepository : IRepository
     {
         private string _path;
+        private List<string> _restorePoints;
         private List<string> _storages;
         public VirtualRepository(string path)
         {
             _path = path ?? throw new ArgumentNullException(nameof(path));
             _storages = new List<string>();
+            _restorePoints = new List<string>();
         }
 
+        public IReadOnlyCollection<string> Points => _restorePoints;
+        public IReadOnlyCollection<string> Storages => _storages;
         public void MakeRepository(RestorePoint point)
         {
             _ = point ?? throw new ArgumentNullException(nameof(point));
