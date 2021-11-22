@@ -7,10 +7,9 @@ namespace Backups.ServerBackup
 {
     public class ServerFile : IJobObject
     {
-        private string _localPath;
         public ServerFile(string localPath)
         {
-            _localPath = localPath ?? throw new ArgumentNullException(nameof(localPath));
+            LocalPath = localPath ?? throw new ArgumentNullException(nameof(localPath));
             Name = Path.GetFileName(localPath);
             if (!File.Exists(localPath))
             {
@@ -25,13 +24,15 @@ namespace Backups.ServerBackup
         }
 
         [JsonInclude]
+        public string LocalPath { get; private set; }
+        [JsonInclude]
         public string Name { get; private set; }
         [JsonInclude]
         public byte[] Contents { get; private set; }
 
         public string GetPath()
         {
-            return _localPath;
+            return LocalPath;
         }
 
         public string GetName()
