@@ -1,29 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Backups.BackupAbstractModel;
-using BackupsExtra.SaveChanges;
 
 namespace BackupsExtra.MergePoints
 {
     public class RestorePointsMerger
     {
-        private List<IChangeSaver> _savers;
-        public RestorePointsMerger()
-        {
-            _savers = new List<IChangeSaver>();
-        }
-
-        public RestorePointsMerger AddSaver(IChangeSaver saver)
-        {
-            if (_savers.Find(x => x.GetType() == saver.GetType()) is null)
-            {
-                _savers.Add(saver);
-            }
-
-            return this;
-        }
-
         public void Merge(BackupJob job, RestorePoint point1, RestorePoint point2)
         {
             if (!job.Points.Contains(point1))
@@ -44,18 +26,11 @@ namespace BackupsExtra.MergePoints
             job.DeleteRestorePoint(point1);
             if (job.Storage.GetType() == typeof(SingleStorage))
             {
-                SaveChanges(job);
                 return;
             }
 
             point1.Objects.Where(x => !point2.Objects.Contains(x))
                 .ToList().ForEach(x => point2.AddObject(x));
-            SaveChanges(job);
-        }
-
-        private void SaveChanges(BackupJob job)
-        {
-            _savers.ForEach(x => x.Update(job));
         }
     }
 }
