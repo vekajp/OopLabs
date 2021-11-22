@@ -22,4 +22,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Backups\Backups.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="JetBrains.ReSharper.TestRunner.Abstractions, Version=2.2.1.0, Culture=neutral, PublicKeyToken=5c492ec4f3eccde3">
+      <HintPath>..\..\..\..\Applications\Rider.app\Contents\lib\ReSharperHost\TestRunner\netcoreapp2.0\JetBrains.ReSharper.TestRunner.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
