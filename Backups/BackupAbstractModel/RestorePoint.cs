@@ -19,5 +19,10 @@ namespace Backups.BackupAbstractModel
         public string Name => _dateCreated.ToString(DateFormat);
 
         public string ParentJobName { get; }
+
+        public void AddObject(IJobObject jobObject)
+        {
+            _objects.Add(jobObject);
+        }
     }
 }

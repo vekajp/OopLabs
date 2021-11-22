@@ -23,7 +23,11 @@ namespace Backups.VirtualBackup
         {
             _ = point ?? throw new ArgumentNullException(nameof(point));
             _path = point.Name;
-            _restorePoints.Add(point.Name);
+            if (!_restorePoints.Contains(point.Name))
+            {
+                _restorePoints.Add(point.Name);
+            }
+
             Storages[_path] = new List<string>();
         }
 
@@ -36,7 +40,7 @@ namespace Backups.VirtualBackup
         public void Store(IReadOnlyCollection<IJobObject> objects)
         {
             _ = objects ?? throw new ArgumentNullException(nameof(objects));
-            Storages[_path].Add(objects.ToString());
+            Storages[_path].Add(objects.GetHashCode().ToString());
         }
 
         public string GetStoragePath()
@@ -49,15 +53,15 @@ namespace Backups.VirtualBackup
             return Storages.Values.Sum(storages => storages.Count);
         }
 
-        public void RemoveRestorePoint(RestorePoint point)
+        public void RemoveRestorePoint(string pointName)
         {
-            if (!_restorePoints.Contains(point.Name))
+            if (!_restorePoints.Contains(pointName))
             {
-                throw new ArgumentException("Point is not stored", nameof(point));
+                throw new ArgumentException("Point is not stored", pointName);
             }
 
-            _restorePoints.Remove(point.Name);
-            Storages.Remove(point.Name);
+            _restorePoints.Remove(pointName);
+            Storages.Remove(pointName);
         }
     }
 }
