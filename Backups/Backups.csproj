@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Backups.Client\Backups.Client.csproj" />
-    <ProjectReference Include="..\BackupsServer\BackupsServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

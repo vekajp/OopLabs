@@ -6,4 +6,17 @@
         <RootNamespace>Backups.Client</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="D:\coding\itmo-mentor\OopLabs-template\.editorconfig">
+            <Link>OopLabs-template\.editorconfig</Link>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
 </Project>

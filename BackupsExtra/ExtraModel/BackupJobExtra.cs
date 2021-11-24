@@ -116,6 +116,7 @@ namespace BackupsExtra.ExtraModel
 
         public BackupJobExtra BackupFromRestorePoint(RestorePoint point)
         {
+            _ = _restorer ?? throw new NullReferenceException("Restorer was not assigned yet");
             _logger.LogMessage($"start restoring from point {point.Name}");
             _restorer.Restore(point);
             _logger.LogMessage($"successfully restored from point {point.Name}");

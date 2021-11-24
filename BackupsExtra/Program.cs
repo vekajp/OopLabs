@@ -1,10 +1,17 @@
-﻿using Backups.BackupAbstractModel;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using Backups.BackupAbstractModel;
+using Backups.Client;
 using Backups.LocalBackup;
+using Backups.ServerBackup;
 using BackupsExtra.DeleteRestorePointsAlgorithms;
 using BackupsExtra.ExtraModel;
 using BackupsExtra.Logging;
 using BackupsExtra.Restore;
 using BackupsExtra.SaveChanges;
+using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 
 namespace BackupsExtra
 {
@@ -12,10 +19,12 @@ namespace BackupsExtra
     {
         private static void Main()
         {
-            TestDeleteRestorePointsLocally();
-            TestLocalMerge();
-            TestLocalRestoreSingleStorage();
-            TestLocalRestoreSplitStorage();
+            // TestDeleteRestorePointsLocally();
+            // TestLocalMerge();
+            // TestLocalRestoreSingleStorage();
+            // TestLocalRestoreSplitStorage();
+            TestServerChangeSaver();
+            TestServerRestore();
         }
 
         private static void TestDeleteRestorePointsLocally()
@@ -118,6 +127,63 @@ namespace BackupsExtra
             IRestorer restorer = new LocalRestorer(localRepository)
                 .StoreToLocation("/Users/vekajp/Desktop/restore_split");
             joba.SetRestorer(restorer).BackupFromRestorePoint(point2);
+        }
+
+        private static void TestServerChangeSaver()
+        {
+            using var client = new TcpServerClient(IPAddress.Parse("127.0.0.1"), 8888);
+            using var repository = new ServerExtraRepository(client);
+            BackupConfiguration config = new BackupConfiguration(repository)
+                .AddSaver(new ServerChangeSaver())
+                .SetLogger(new ConsoleLogger())
+                .SetStorage(new SplitStorage());
+            var joba = new BackupJobExtra("serverJob", config);
+            var file1 = new ServerFile("/Users/vekajp/Desktop/backups/file1.txt");
+            var file2 = new ServerFile("/Users/vekajp/Desktop/backups/file2.txt");
+            joba.AddObject(file1);
+            RestorePoint point1 = joba.CreateRestorePoint();
+            Thread.Sleep(1000);
+            joba.AddObject(file2);
+            RestorePoint point2 = joba.CreateRestorePoint();
+            string[] points = repository.GetRestorePoints();
+            points.ForEach(Console.WriteLine);
+            points.Select(repository.GetFilesInRestorePoint).ForEach(x => x.ForEach(Console.WriteLine));
+
+            joba.DeleteRestorePoint(point1).SaveChanges();
+            points = repository.GetRestorePoints();
+            points.ForEach(Console.WriteLine);
+            points.Select(repository.GetFilesInRestorePoint).ForEach(x => x.ForEach(Console.WriteLine));
+
+            Thread.Sleep(1000);
+            joba.DeleteObject(file1);
+            joba.CreateRestorePoint();
+            joba.SaveChanges();
+            points = repository.GetRestorePoints();
+            points.ForEach(Console.WriteLine);
+            points.Select(repository.GetFilesInRestorePoint).ForEach(x => x.ForEach(Console.WriteLine));
+        }
+
+        private static void TestServerRestore()
+        {
+            using var client = new TcpServerClient(IPAddress.Parse("127.0.0.1"), 8888);
+            using var repository = new ServerExtraRepository(client);
+            BackupConfiguration config = new BackupConfiguration(repository)
+                .AddSaver(new ServerChangeSaver())
+                .SetLogger(new ConsoleLogger())
+                .SetStorage(new SplitStorage());
+            var joba = new BackupJobExtra("serverJob", config);
+            var file1 = new ServerFile("/Users/vekajp/Desktop/backups/file1.txt");
+            var file2 = new ServerFile("/Users/vekajp/Desktop/backups/file2.txt");
+
+            IRestorer serverRestorer = new ServerRestorer(repository)
+                .StoreToLocation("/Users/vekajp/Desktop/server_restore");
+
+            joba.SetRestorer(serverRestorer);
+            joba.AddObject(file1);
+            joba.AddObject(file2);
+            RestorePoint point2 = joba.CreateRestorePoint();
+
+            joba.BackupFromRestorePoint(point2);
         }
     }
 }
