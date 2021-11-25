@@ -1,7 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using BackupsExtra.ExtraModel;
-
-using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 
 namespace BackupsExtra.ApplicationState
 {
@@ -15,7 +14,7 @@ namespace BackupsExtra.ApplicationState
         public BackupConfigurationDto(BackupConfiguration config)
         {
             Repository = new RepositoryDto(config.Repository);
-            config.Savers.ForEach(x => Savers?.Add(new ChangeSaverDto(x)));
+            config.Savers.ToList().ForEach(x => Savers?.Add(new ChangeSaverDto(x)));
         }
 
         public RepositoryDto Repository { get; set; }
