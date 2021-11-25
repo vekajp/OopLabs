@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Backups.BackupAbstractModel;
 
 namespace BackupsExtra.DeleteRestorePointsAlgorithms

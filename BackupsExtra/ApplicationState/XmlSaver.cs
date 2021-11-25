@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using Backups.BackupAbstractModel;
-using BackupsExtra.ExtraModel;
 
 namespace BackupsExtra.ApplicationState
 {

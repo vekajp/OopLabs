@@ -1,16 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
-using Backups.BackupAbstractModel;
-using Backups.Client;
-using Backups.LocalBackup;
-using Backups.ServerBackup;
-using Backups.VirtualBackup;
-using BackupsExtra.DeleteRestorePointsAlgorithms;
 using BackupsExtra.ExtraModel;
-using BackupsExtra.Logging;
-using BackupsExtra.Restore;
-using BackupsExtra.SaveChanges;
+
 using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 
 namespace BackupsExtra.ApplicationState
