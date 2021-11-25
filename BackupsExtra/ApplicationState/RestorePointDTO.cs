@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Backups.BackupAbstractModel;
-using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 
 namespace BackupsExtra.ApplicationState
 {
@@ -15,7 +15,7 @@ namespace BackupsExtra.ApplicationState
         public RestorePointDto(RestorePoint restorePoint)
         {
             Objects = new List<JobObjectDto>();
-            restorePoint.Objects.ForEach(x => Objects?.Add(new JobObjectDto(x)));
+            restorePoint.Objects.ToList().ForEach(x => Objects?.Add(new JobObjectDto(x)));
             ParentJobName = restorePoint.ParentJobName;
             TimeCreated = restorePoint.DateCreated;
         }

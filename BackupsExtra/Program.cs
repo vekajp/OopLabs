@@ -13,7 +13,6 @@ using BackupsExtra.ExtraModel;
 using BackupsExtra.Logging;
 using BackupsExtra.Restore;
 using BackupsExtra.SaveChanges;
-using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 using BackupJobExtra = BackupsExtra.ExtraModel.BackupJobExtra;
 
 namespace BackupsExtra
@@ -150,21 +149,21 @@ namespace BackupsExtra
             joba.AddObject(file2);
             RestorePoint point2 = joba.CreateRestorePoint();
             string[] points = repository.GetRestorePoints();
-            points.ForEach(Console.WriteLine);
-            points.Select(repository.GetFilesInRestorePoint).ForEach(x => x.ForEach(Console.WriteLine));
+            points.ToList().ForEach(Console.WriteLine);
+            points.Select(repository.GetFilesInRestorePoint).ToList().ForEach(x => x.ToList().ForEach(Console.WriteLine));
 
             joba.DeleteRestorePoint(point1).SaveChanges();
             points = repository.GetRestorePoints();
-            points.ForEach(Console.WriteLine);
-            points.Select(repository.GetFilesInRestorePoint).ForEach(x => x.ForEach(Console.WriteLine));
+            points.ToList().ForEach(Console.WriteLine);
+            points.Select(repository.GetFilesInRestorePoint).ToList().ForEach(x => x.ToList().ForEach(Console.WriteLine));
 
             Thread.Sleep(1000);
             joba.DeleteObject(file1);
             joba.CreateRestorePoint();
             joba.SaveChanges();
             points = repository.GetRestorePoints();
-            points.ForEach(Console.WriteLine);
-            points.Select(repository.GetFilesInRestorePoint).ForEach(x => x.ForEach(Console.WriteLine));
+            points.ToList().ForEach(Console.WriteLine);
+            points.Select(repository.GetFilesInRestorePoint).ToList().ForEach(x => x.ToList().ForEach(Console.WriteLine));
         }
 
         private static void TestServerRestore()

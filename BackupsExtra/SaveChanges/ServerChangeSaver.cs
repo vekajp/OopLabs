@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Backups.BackupAbstractModel;
 using BackupsExtra.ExtraModel;
-using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 
 namespace BackupsExtra.SaveChanges
 {
@@ -15,7 +14,7 @@ namespace BackupsExtra.SaveChanges
             string[] pointsInRepo = repository.GetRestorePoints();
             pointsInRepo.Where(point => job.Points.All(x => x.Name != point)).ToList()
                 .ForEach(repository.RemoveRestorePoint);
-            job.Points.ForEach(point => UpdatePoint(point, repository));
+            job.Points.ToList().ForEach(point => UpdatePoint(point, repository));
         }
 
         private void UpdatePoint(RestorePoint point, ServerExtraRepository repository)
@@ -28,13 +27,13 @@ namespace BackupsExtra.SaveChanges
         private void CleanRestorePoint(RestorePoint point, ServerExtraRepository repository, string[] filesInRepo)
         {
             filesInRepo.Where(x => point.Objects.All(obj => obj.GetName() != x) && point.Name != Path.GetFileNameWithoutExtension(x))
-                .ForEach(file => repository.RemoveFileFromRestorePoint(file, point.Name));
+                .ToList().ForEach(file => repository.RemoveFileFromRestorePoint(file, point.Name));
         }
 
         private void AddFilesToPoint(RestorePoint point, ServerExtraRepository repository, string[] filesInRepo)
         {
             point.Objects.Where(x => filesInRepo.All(file => file != x.GetName() && point.Name != Path.GetFileNameWithoutExtension(file)))
-                .ForEach(obj => repository.AddFileToRestorePoint(obj, point));
+                .ToList().ForEach(obj => repository.AddFileToRestorePoint(obj, point));
         }
     }
 }

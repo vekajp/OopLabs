@@ -4,7 +4,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Backups.BackupAbstractModel;
-using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
 
 namespace BackupsExtra.Restore
 {
@@ -47,9 +46,9 @@ namespace BackupsExtra.Restore
 
             string[] filesInPoint = Directory.GetFiles(pointStoragePath);
             string directoryToUnzip = CreateDirectory(pointStoragePath, DateTime.Now.ToString(CultureInfo.InvariantCulture));
-            filesInPoint.ForEach(file => ZipFile.ExtractToDirectory(file, directoryToUnzip));
+            filesInPoint.ToList().ForEach(file => ZipFile.ExtractToDirectory(file, directoryToUnzip));
             string[] unzipedFiles = Directory.GetFiles(directoryToUnzip);
-            unzipedFiles.ForEach(file => RestoreObject(point, file));
+            unzipedFiles.ToList().ForEach(file => RestoreObject(point, file));
         }
 
         private void RestoreObject(RestorePoint point, string fileToRestore)
