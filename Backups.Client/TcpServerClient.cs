@@ -10,17 +10,19 @@ namespace Backups.Client
     {
         private const int BytesCount = 1024;
         private TcpClient _client;
-        private IPAddress _address;
-        private int _port;
-        private bool _disposedClient;
 
         public TcpServerClient(IPAddress address, int port)
         {
-            _address = address;
-            _port = port;
-            _disposedClient = true;
+            Address = address;
+            Port = port;
         }
 
+        public TcpServerClient()
+        {
+        }
+
+        public IPAddress Address { get; private set; }
+        public int Port { get; private set; }
         public void SendData(string stringData)
         {
             Stream stream = ConnectClient();
@@ -115,8 +117,7 @@ namespace Backups.Client
         private Stream ConnectClient()
         {
             _client = new TcpClient();
-            _client.Connect(_address, _port);
-            _disposedClient = false;
+            _client.Connect(Address, Port);
             return _client.GetStream();
         }
 

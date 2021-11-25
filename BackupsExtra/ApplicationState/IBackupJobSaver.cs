@@ -4,7 +4,7 @@ namespace BackupsExtra.ApplicationState
 {
     public interface IBackupJobSaver
     {
-        void Save();
-        BackupJob Load();
+        void Save(ApplicationContext context);
+        ApplicationContext Load();
     }
 }

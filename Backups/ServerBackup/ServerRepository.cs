@@ -51,6 +51,11 @@ namespace Backups.ServerBackup
             return _repo.GetStoragePath();
         }
 
+        public TcpServerClient GetClient()
+        {
+            return _client;
+        }
+
         public void Dispose()
         {
             _repo.Delete();

@@ -6,12 +6,15 @@ using Backups.BackupAbstractModel;
 using Backups.Client;
 using Backups.LocalBackup;
 using Backups.ServerBackup;
+using Backups.VirtualBackup;
+using BackupsExtra.ApplicationState;
 using BackupsExtra.DeleteRestorePointsAlgorithms;
 using BackupsExtra.ExtraModel;
 using BackupsExtra.Logging;
 using BackupsExtra.Restore;
 using BackupsExtra.SaveChanges;
 using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
+using BackupJobExtra = BackupsExtra.ExtraModel.BackupJobExtra;
 
 namespace BackupsExtra
 {
@@ -19,12 +22,13 @@ namespace BackupsExtra
     {
         private static void Main()
         {
-            // TestDeleteRestorePointsLocally();
-            // TestLocalMerge();
-            // TestLocalRestoreSingleStorage();
-            // TestLocalRestoreSplitStorage();
+            TestDeleteRestorePointsLocally();
+            TestLocalMerge();
+            TestLocalRestoreSingleStorage();
+            TestLocalRestoreSplitStorage();
             TestServerChangeSaver();
             TestServerRestore();
+            TestSystemSaveAndLoad();
         }
 
         private static void TestDeleteRestorePointsLocally()
@@ -184,6 +188,73 @@ namespace BackupsExtra
             RestorePoint point2 = joba.CreateRestorePoint();
 
             joba.BackupFromRestorePoint(point2);
+        }
+
+        private static void TestSystemSaveAndLoad()
+        {
+            string path = "/Users/vekajp/Desktop/test_backup";
+            var localRepository = new LocalRepository(path);
+            BackupConfiguration config1 = new BackupConfiguration(localRepository)
+                .AddSaver(new LocalChangeSaver())
+                .SetLogger(new ConsoleLogger())
+                .SetStorage(new SplitStorage());
+            var localJoba1 = new BackupJobExtra("job1", config1);
+            var file1 = new LocalFile("/Users/vekajp/Desktop/backups/file1.txt");
+            var file2 = new LocalFile("/Users/vekajp/Desktop/backups/file2.txt");
+            localJoba1.AddObject(file1);
+            localJoba1.CreateRestorePoint();
+            localJoba1.AddObject(file2);
+            localJoba1.CreateRestorePoint();
+
+            var localJoba2 = new BackupJobExtra("job2", config1);
+            localJoba2.AddObject(file1);
+            localJoba2.CreateRestorePoint();
+
+            var repo = new VirtualRepository("some path");
+            BackupConfiguration virtualConfig = new BackupConfiguration(repo)
+                .AddSaver(new VirtualChangeSaver());
+            var virtualJoba = new BackupJobExtra("job3", virtualConfig);
+            virtualJoba.AddObject(new VirtualFile("file1.png"));
+            virtualJoba.CreateRestorePoint();
+            Thread.Sleep(1000);
+            RestorePoint point1 = virtualJoba.Points.Last();
+            virtualJoba.AddObject(new VirtualFile("file2.png"));
+            virtualJoba.CreateRestorePoint();
+            Thread.Sleep(1000);
+            virtualJoba.AddObject(new VirtualFile("file3.png"));
+            virtualJoba.CreateRestorePoint();
+            Thread.Sleep(1000);
+            virtualJoba.AddObject(new VirtualFile("file4.png"));
+            virtualJoba.CreateRestorePoint();
+
+            var applicationContext = ApplicationContext.Instance();
+            applicationContext.AddJobToContext(localJoba1);
+            applicationContext.AddJobToContext(localJoba2);
+            applicationContext.AddJobToContext(virtualJoba);
+
+            XmlSaver saver = new XmlSaver();
+            saver.Save(applicationContext);
+
+            var contextLoaded = saver.Load();
+            var jobs = contextLoaded.BackupJobs;
+            foreach (BackupJobExtra job in jobs)
+            {
+                Console.WriteLine($"{job.Name}'s points:");
+                foreach (RestorePoint point in job.Points)
+                {
+                    Console.WriteLine($"\t{point.Name}'s objects:");
+                    foreach (IJobObject obj in point.Objects)
+                    {
+                        Console.WriteLine($"\t\t{obj.GetName()}");
+                    }
+                }
+
+                Console.WriteLine($"{job.Name}'s objects:");
+                foreach (IJobObject obj in job.Objects)
+                {
+                    Console.WriteLine($"\t{obj.GetName()}");
+                }
+            }
         }
     }
 }

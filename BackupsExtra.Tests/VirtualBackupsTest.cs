@@ -6,6 +6,7 @@ using BackupsExtra.DeleteRestorePointsAlgorithms;
 using BackupsExtra.ExtraModel;
 using BackupsExtra.SaveChanges;
 using NUnit.Framework;
+using BackupJobExtra = BackupsExtra.ExtraModel.BackupJobExtra;
 
 namespace BackupsExtra.Tests
 {

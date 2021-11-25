@@ -18,6 +18,11 @@ namespace BackupsExtra.ExtraModel
         private RestorePointsCleaner _cleaner;
         private IRestorer _restorer;
         private List<IChangeSaver> _savers;
+        public BackupJobExtra()
+        {
+            _savers = new List<IChangeSaver>();
+        }
+
         public BackupJobExtra(string name, IStorage storage, IRepository repository, ILogger logger)
         {
             _job = new BackupJob(name, storage, repository);
@@ -28,21 +33,25 @@ namespace BackupsExtra.ExtraModel
 
         public BackupJobExtra(string name, BackupConfiguration config)
         {
-            _job = new BackupJob(name, config.Storage, config.Repository);
+            _job = new Backups.BackupAbstractModel.BackupJob(name, config.Storage, config.Repository);
             _logger = config.Logger;
             _merger = new RestorePointsMerger();
             _cleaner = new RestorePointsCleaner(config.Cleaner);
             _savers = config.Savers.ToList();
+            Configuration = config;
         }
 
         public string Name => _job.Name;
+
+        public IReadOnlyCollection<IJobObject> Objects => _job.Objects;
         public int PointsCount => _job.PointsCount;
         public IReadOnlyCollection<RestorePoint> Points => _job.Points;
         public IRepository Repository => _job.Repository;
         public IStorage Storage => _job.Storage;
+        public BackupConfiguration Configuration { get; private set; }
         public BackupJobExtra ChangeConfiguration(BackupConfiguration config)
         {
-            _job = new BackupJob(Name, config.Storage, config.Repository);
+            _job = new Backups.BackupAbstractModel.BackupJob(Name, config.Storage, config.Repository);
             _logger = config.Logger;
             _merger = new RestorePointsMerger();
             _cleaner = new RestorePointsCleaner(config.Cleaner);
@@ -74,6 +83,12 @@ namespace BackupsExtra.ExtraModel
             RestorePoint point = _job.CreateRestorePoint();
             _logger.LogMessage($"point {point.Name} was successfully created");
             return point;
+        }
+
+        public BackupJobExtra AddRestorePoint(RestorePoint restorePoint)
+        {
+            _job.AddRestorePoint(restorePoint);
+            return this;
         }
 
         public BackupJobExtra DeleteRestorePoint(RestorePoint point)

@@ -20,6 +20,7 @@ namespace Backups.BackupAbstractModel
         }
 
         public string Name { get; }
+        public IReadOnlyCollection<IJobObject> Objects => _objects;
         public int PointsCount => _points.Count;
         public IReadOnlyCollection<RestorePoint> Points => _points;
         public IRepository Repository => _repository;
@@ -53,6 +54,16 @@ namespace Backups.BackupAbstractModel
             _storage.Store(_repository);
             _points.Add(point);
             return point;
+        }
+
+        public void AddRestorePoint(RestorePoint point)
+        {
+            if (_points.Contains(point))
+            {
+                throw new ArgumentNullException("point is already in a job", nameof(point));
+            }
+
+            _points.Add(point);
         }
 
         public void DeleteRestorePoint(RestorePoint point)
