@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 
 namespace Backups.BackupAbstractModel
 {
@@ -56,24 +55,20 @@ namespace Backups.BackupAbstractModel
             return point;
         }
 
-        public void AddRestorePoint(RestorePoint point)
+        public bool AddRestorePoint(RestorePoint point)
         {
             if (_points.Contains(point))
             {
-                throw new ArgumentNullException("point is already in a job", nameof(point));
+                return false;
             }
 
             _points.Add(point);
+            return true;
         }
 
-        public void DeleteRestorePoint(RestorePoint point)
+        public bool DeleteRestorePoint(RestorePoint point)
         {
-            if (!_points.Contains(point))
-            {
-                throw new ArgumentException("Point is not in a job", nameof(point));
-            }
-
-            _points.Remove(point);
+            return _points.Remove(point);
         }
 
         public void Clear()
