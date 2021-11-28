@@ -14,7 +14,7 @@ namespace BackupsExtra.DeleteRestorePointsAlgorithms
         public override void Clean(BackupJob job)
         {
             var points = job.Points.ToList();
-            points.Where(x => PointMustBeDeleted(x, job)).ToList().ForEach(job.DeleteRestorePoint);
+            points.Where(x => PointMustBeDeleted(x, job)).ToList().ForEach(point => job.DeleteRestorePoint(point));
         }
 
         public override bool PointMustBeDeleted(RestorePoint point, BackupJob job)

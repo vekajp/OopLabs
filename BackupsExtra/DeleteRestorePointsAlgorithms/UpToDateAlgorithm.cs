@@ -18,7 +18,7 @@ namespace BackupsExtra.DeleteRestorePointsAlgorithms
         {
             var points = job.Points.ToList();
             points.Where(x => DateTime.ParseExact(x.Name, DateFormat, CultureInfo.InvariantCulture) < _date)
-                .ToList().ForEach(job.DeleteRestorePoint);
+                .ToList().ForEach(point => job.DeleteRestorePoint(point));
         }
 
         public bool PointMustBeDeleted(RestorePoint point, BackupJob job)
