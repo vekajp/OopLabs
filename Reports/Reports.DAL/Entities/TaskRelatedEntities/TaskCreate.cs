@@ -7,11 +7,7 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
         public TaskCreate(Employee employee)
             : base(employee)
         {
-        }
-
-        public override string GetNote()
-        {
-            return $"{DateCreated}\tTask was created by employee {ChangeInitiator.Name}";
+            Comment = $"{DateCreated}\tTask was created by employee {ChangeInitiator.Name}";
         }
     }
 }

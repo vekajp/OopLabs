@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Reports.DAL.Entities.TaskRelatedEntities;
+using System.Linq;
+using Reports.DAL.Tools;
 
 namespace Reports.DAL.Entities.Employees
 {
@@ -31,6 +32,17 @@ namespace Reports.DAL.Entities.Employees
             }
 
             return success;
+        }
+
+        public override Report SendFinalReport()
+        {
+            if (Employees.Any(x => DraftReport.Reports.Select(y => y.Author).All(y => !Equals(y, x))))
+            {
+                throw new ReportException("Not all employees have submitted their reports");
+            }
+
+            Supervisor.IncludeReport(GetFinalReport());
+            return DraftReport;
         }
     }
 }

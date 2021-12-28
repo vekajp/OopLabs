@@ -7,14 +7,11 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
         public TaskComment(Employee employee, string comment)
             : base(employee)
         {
-            Comment = comment;
+            Comment = $"{DateCreated}\tEmployee {ChangeInitiator.Name} commented on task : {comment}";
+            InnerComment = comment;
         }
 
 
-        public string Comment { get; private set; }
-        public override string GetNote()
-        {
-            return $"{DateCreated}\tEmployee {ChangeInitiator.Name} commented on task : {Comment}";
-        }
+        public string InnerComment { get; init; }
     }
 }

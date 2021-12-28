@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Reports.DAL.Entities.TaskRelatedEntities;
 
@@ -11,18 +12,19 @@ namespace Reports.DAL.Entities.Employees
         {
             Name = name;
             Id = Guid.NewGuid();
-            Employees = new List<Employee>();
-            DraftReport = new Report();
+            DraftReport = new Report(this);
         }
 
-        public Guid Id { get; private init; }
-        public string Name { get; private init; }
-        protected List<Employee> Employees { get; set; }
-        public abstract bool AddSubordinate(Employee employee);
-        public abstract bool RemoveSubordinate(Employee employee);
-        private Employee Supervisor { get; set; }
-        private Report DraftReport { get; set; }
-        private Report LastReport { get; set; }
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+
+        [NotMapped]
+        public Report DraftReport { get; set; }
+
+        [NotMapped]
+        protected Employee Supervisor { get; private set; }
+        protected virtual List<Employee> Employees { get; set; } = new List<Employee>();
+
         public virtual List<Employee> GetSubordinates(Predicate<Employee> predicate)
         {
             var employees = new List<Employee>();
@@ -31,10 +33,13 @@ namespace Reports.DAL.Entities.Employees
             return employees;
         }
 
+        public abstract bool AddSubordinate(Employee employee);
+        public abstract bool RemoveSubordinate(Employee employee);
         public void ReassignEmployee(Employee employee)
         {
             Supervisor?.RemoveSubordinate(this);
             Supervisor = employee;
+            employee.AddSubordinate(this);
         }
 
         public Employee GetSupervisor()
@@ -48,9 +53,21 @@ namespace Reports.DAL.Entities.Employees
             return DraftReport;
         }
 
+        public Report AddTaskToReport(Task task)
+        {
+            DraftReport.AddTask(task);
+            return DraftReport;
+        }
+
         public Report IncludeReports(List<Report> reports)
         {
             DraftReport.AddReports(reports);
+            return DraftReport;
+        }
+
+        public Report IncludeReport(Report report)
+        {
+            DraftReport.AddReport(report);
             return DraftReport;
         }
 
@@ -59,11 +76,32 @@ namespace Reports.DAL.Entities.Employees
             return DraftReport;
         }
 
-        public Report GetFinalReport()
+        public virtual Guid GetSupervisorId()
         {
-            LastReport = DraftReport;
-            DraftReport = new Report();
-            return LastReport;
+            return Supervisor.Id;
+        }
+
+        public abstract Report SendFinalReport();
+        protected Report GetFinalReport()
+        {
+            return DraftReport;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType()) return false;
+            var other = (Employee)obj;
+            return other.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public void ClearReport()
+        {
+            DraftReport = new Report(this);
         }
     }
 }

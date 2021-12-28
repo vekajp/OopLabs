@@ -1,26 +1,43 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Text.Json.Serialization;
+using Reports.DAL.Entities.Employees;
 using Reports.DAL.Entities.TaskRelatedEntities;
 
 namespace Reports.DAL.Entities
 {
     public class Report
     {
-        private List<Task> _tasks;
-        private List<Report> _reports;
-        public Report()
+        public Report(Employee author)
         {
-            _tasks = new List<Task>();
-            _reports = new List<Report>();
+            Tasks = new List<Task>();
+            Reports = new List<Report>();
+            Author = author;
+            Id = Guid.NewGuid();
+        }
+
+        public Report(Report report)
+        {
+            Tasks = new List<Task>();
+            Reports = new List<Report>();
+            report.Reports.ForEach(x => Reports.Add(x));
+            report.Tasks.ForEach(x => Tasks.Add(x));
+            Author = report.Author;
+            Id = report.Id;
         }
 
         public Report(List<Task> tasks, List<Report> reports)
         {
-            _tasks = tasks;
-            _reports = reports;
+            Tasks = tasks;
+            Reports = reports;
         }
 
+        public Guid Id { get; init; }
+        public Employee Author { get; private set; }
+        public List<Task> Tasks { get; set; }
+        public List<Report> Reports { get; set; }
         public void AddTasks(List<Task> tasks)
         {
             tasks.ForEach(x => AddTask(x));
@@ -33,23 +50,23 @@ namespace Reports.DAL.Entities
 
         public bool AddTask(Task task)
         {
-            if (_tasks.Contains(task)) return false;
-            _tasks.Add(task);
+            if (Tasks.Contains(task)) return false;
+            Tasks.Add(task);
             return true;
         }
 
         public bool AddReport(Report report)
         {
-            if (_reports.Contains(report)) return false;
-            _reports.Add(report);
+            if (Reports.Contains(report)) return false;
+            Reports.Add(report);
             return true;
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder();
-            _reports.ForEach(x => builder.Append(x));
-            foreach (Task task in _tasks)
+            Reports.ForEach(x => builder.Append(x));
+            foreach (Task task in Tasks)
             {
                 builder.Append($"Task {task.Name} of employee {task.PinedEmployee.Name} :\n");
                 task.Comments.ForEach(comment => builder.Append($"\t{comment}\n"));
@@ -61,7 +78,13 @@ namespace Reports.DAL.Entities
 
         public bool Empty()
         {
-            return _reports.Count == 0 && _tasks.Count == 0;
+            return Reports.Count == 0 && Tasks.Count == 0;
+        }
+
+        public void Clear()
+        {
+            Tasks = new List<Task>();
+            Reports = new List<Report>();
         }
     }
 }

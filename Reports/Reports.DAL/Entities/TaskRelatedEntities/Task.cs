@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
 using Reports.DAL.Entities.Employees;
 
 namespace Reports.DAL.Entities.TaskRelatedEntities
@@ -16,13 +18,17 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
             PinedEmployee = creator;
         }
 
-        public Guid Id { get; private init; }
+        public Guid Id { get; init; }
         public string Name { get; private set; }
-        public TaskState State { get; private set; }
-        public List<TaskModification> Comments { get; private set; }
-        public Employee PinedEmployee { get; private set; }
-        public DateTime DateCreated { get; private init; }
+        public TaskState State { get; set; }
+        [JsonIgnore]
+        public List<TaskModification> Comments { get; set; }
+        [JsonIgnore]
+        public Employee PinedEmployee { get; set; }
+        public DateTime DateCreated { get; init; }
         public DateTime DateModified { get; private set; }
+        [JsonIgnore]
+        public Employee Creator => Comments.First().ChangeInitiator;
 
         public Task AssignToEmployee(Employee initiator, Employee another)
         {
@@ -35,6 +41,11 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
 
         public Task ChangeState(Employee initiator, TaskState state)
         {
+            if (state < State)
+            {
+                throw new ArgumentException("Cannot downgrade task state", nameof(state));
+            }
+
             var comment = new ChangeTaskState(initiator, state);
             Comments.Add(comment);
             State = state;

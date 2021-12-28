@@ -9,10 +9,16 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
         {
             ChangeInitiator = employee;
             DateCreated = DateTime.Now;
+            Id = Guid.NewGuid();
         }
 
-        public Employee ChangeInitiator { get; private init; }
-        public DateTime DateCreated { get; private set; }
-        public abstract string GetNote();
+        public Guid Id { get; init; }
+        public Employee ChangeInitiator { get; init; }
+        public DateTime DateCreated { get; init; }
+        public string Comment { get; protected set; }
+        public string GetNote()
+        {
+            return Comment;
+        }
     }
 }

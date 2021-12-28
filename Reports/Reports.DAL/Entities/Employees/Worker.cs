@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Reports.DAL.Entities.TaskRelatedEntities;
-
 namespace Reports.DAL.Entities.Employees
 {
     public class Worker : Employee
@@ -18,6 +15,12 @@ namespace Reports.DAL.Entities.Employees
         public override bool RemoveSubordinate(Employee employee)
         {
             return false;
+        }
+
+        public override Report SendFinalReport()
+        {
+            Supervisor.IncludeReport(GetFinalReport());
+            return DraftReport;
         }
     }
 }

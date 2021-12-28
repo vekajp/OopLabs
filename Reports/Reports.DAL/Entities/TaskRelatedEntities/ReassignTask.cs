@@ -7,15 +7,12 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
         public ReassignTask(Employee initiator, Employee old, Employee assigned)
             : base(initiator)
         {
+            Comment = $"{DateCreated}\t{ChangeInitiator.Name} reassigned task from {old.Name} to {assigned.Name}";
             Old = old;
             Assigned = assigned;
         }
 
-        private Employee Old { get; set; }
-        private Employee Assigned { get; set; }
-        public override string GetNote()
-        {
-            return $"{DateCreated}\t{ChangeInitiator.Name} reassigned task from {Old.Name} to {Assigned.Name}";
-        }
+        public Employee Old { get; init; }
+        public Employee Assigned { get; init; }
     }
 }

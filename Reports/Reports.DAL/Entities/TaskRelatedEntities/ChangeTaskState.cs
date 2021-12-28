@@ -7,12 +7,10 @@ namespace Reports.DAL.Entities.TaskRelatedEntities
         public ChangeTaskState(Employee employee, TaskState state)
             : base(employee)
         {
+            Comment = $"{DateCreated}\tEmployee {ChangeInitiator.Name} changed task state to {state}";
+            State = state;
         }
 
-        private TaskState State { get; set; }
-        public override string GetNote()
-        {
-            return $"{DateCreated}\tEmployee {ChangeInitiator.Name} changed task state to {State}";
-        }
+        public TaskState State { get; init; }
     }
 }

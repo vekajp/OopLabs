@@ -26,10 +26,10 @@ namespace Reports.Tests
                 new Worker("worker2"),
                 new Worker("worker3"),
             };
-            _employeeService.AddEmployee(_testEmployee);
+            _employeeService.TryAddEmployee(_testEmployee);
             foreach (Employee testEmployee in _testEmployees)
             {
-                _employeeService.AddEmployee(testEmployee, _testEmployee);
+                _employeeService.TryAddEmployee(testEmployee, _testEmployee);
             }
         }
 
@@ -58,9 +58,8 @@ namespace Reports.Tests
             task2.LeaveComment(_testEmployee, "ыъ");
             task3.LeaveComment(_testEmployee, "ыъ");
 
-            // TODO uncomment
-            // Assert.AreEqual(3, _manager.GetTasksByDateCreated(creationTime).Count);
-            // Assert.AreEqual(3, _manager.GetTasksByDateLastModified(changeTime).Count);
+            Assert.AreEqual(3, _manager.GetTasksByDateCreated(creationTime).Count);
+            Assert.AreEqual(3, _manager.GetTasksByDateLastModified(changeTime).Count);
         }
 
         [Test]
