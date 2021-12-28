@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Reports.DAL.Entities;
 using Reports.DAL.Entities.Employees;
 using Reports.DAL.Entities.TaskRelatedEntities;

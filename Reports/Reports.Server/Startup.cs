@@ -37,7 +37,7 @@ namespace Reports.Server
 
             services.AddDbContext<ReportsContext>(opt =>
             {
-                opt.UseSqlite(@"Data Source=ReportsDB.db;");
+                opt.UseSqlite(Configuration.GetConnectionString("MyServer"));
             });
             services.AddScoped<IReportService, ReportService>();
         }
