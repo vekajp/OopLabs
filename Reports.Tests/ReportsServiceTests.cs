@@ -125,7 +125,6 @@ namespace Reports.Tests
             Assert.AreEqual(_service.GetEmployeesNotReported().Count, 2);
         }
 
-
         private IEmployeeService CreateEmployeeService()
         {
             _teamLead = new TeamLead("teamlead");

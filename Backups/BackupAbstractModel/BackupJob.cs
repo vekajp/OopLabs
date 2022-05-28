@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Backups.BackupAbstractModel
 {
@@ -47,7 +48,9 @@ namespace Backups.BackupAbstractModel
         public RestorePoint CreateRestorePoint()
         {
             var objects = new List<IJobObject>(_objects);
-            var point = new RestorePoint(objects, Name);
+            DateTime creationDate = DateTime.Now;
+            int version = DefineVersion(creationDate);
+            var point = new RestorePoint(objects, Name, version, creationDate);
             _repository.MakeRepository(point);
             _storage.StorePoint(point);
             _storage.Store(_repository);
@@ -74,6 +77,16 @@ namespace Backups.BackupAbstractModel
         public void Clear()
         {
             _objects.Clear();
+        }
+
+        private int DefineVersion(DateTime creationDate)
+        {
+            return _points.Count(x => x.DateCreated.Year == creationDate.Year &&
+                                      x.DateCreated.Month == creationDate.Month &&
+                                      x.DateCreated.Day == creationDate.Day &&
+                                      x.DateCreated.Hour == creationDate.Hour &&
+                                      x.DateCreated.Minute == creationDate.Minute &&
+                                      x.DateCreated.Second == creationDate.Second);
         }
     }
 }

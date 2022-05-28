@@ -31,7 +31,6 @@ namespace Backups.LocalBackup
         {
             _ = obj ?? throw new ArgumentNullException(nameof(obj));
             MakeZipFile(obj, _repoPath);
-            Thread.Sleep(1000);
         }
 
         public void Store(IReadOnlyCollection<IJobObject> objects)
@@ -46,7 +45,6 @@ namespace Backups.LocalBackup
             string zipPath = $"{_repoPath}/{Path.GetFileName(_repoPath)}.zip";
             ZipFile.CreateFromDirectory(tempDirectory, zipPath);
             Directory.Delete(tempDirectory, true);
-            Thread.Sleep(1000);
         }
 
         public string GetStoragePath()
